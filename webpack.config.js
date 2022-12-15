@@ -1,33 +1,41 @@
-// Generated using webpack-cli https://github.com/webpack/webpack-cli
-
+/* eslint-disable */
 const path = require('path');
 // const { merge } = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const EslingPlugin = require("eslint-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-const isProduction = process.env.mode === 'production';
+const isProduction = process.env.NODE_ENV === 'production';
 
 const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
   : "style-loader";
 
 const config = {
-  entry: "./src/index.ts",
+  entry: path.resolve(__dirname, './src/index.ts'),
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "./dist"),
+    clean: true,
+    filename: 'index.js',
+    assetModuleFilename: 'assets/[name][ext]',
   },
-  devtool: isProduction ? '': 'inline-source-map',
   devServer: {
     open: true,
     host: "localhost",
+    hot: true,
+    port: 3000,
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "./src/index.html"),
+      filename: 'index.html',
     }),
     new EslingPlugin({ extensions: "ts" }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    // new MiniCssExtractPlugin({
+    //   filename: 'index.css',
+    // })
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
@@ -47,10 +55,28 @@ const config = {
         use: [stylesHandler, "css-loader", "sass-loader"],
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: "asset",
+        test: /\.(eot|woff|ttf|woff2)?$/i,
+        type: "asset/resource",
+        generator: {
+          filename: 'assets/fonts/[name][ext]'
+        }
+        //fonts instruction https://youtu.be/o8KMucDpSno?t=3271
       },
-
+      {
+        test: /\.svg$/i,
+        type: "asset/resource",
+        generator: {
+          filename: 'assets/icons/[name][ext]'
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: 'assets/img/[name][ext]'
+        }
+        // images instruction https://youtu.be/o8KMucDpSno?t=3375
+      },
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
@@ -62,11 +88,12 @@ const config = {
 
 module.exports = () => {
   if (isProduction) {
-    config.mode = "production";
+    config.mode = "production"; 
     config.plugins.push(new MiniCssExtractPlugin());
-    config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
+    //config.plugins.push(new WorkboxWebpackPlugin.GenerateSW());
   } else {
     config.mode = "development";
+    config.devtool = 'inline-source-map';
   }
   return config;
 };

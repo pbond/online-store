@@ -1,3 +1,5 @@
+import './index.scss';
+
 class Application {
   constructor() {
     console.log('Hello');
