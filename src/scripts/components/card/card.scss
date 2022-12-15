@@ -1,0 +1,7 @@
+div {
+  background-color: $color-green;
+  @extend %opacity-not-active;
+  &:hover {
+    @extend %opacity-active
+  }
+}
