@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const EslingPlugin = require("eslint-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -25,6 +26,9 @@ const config = {
     host: "localhost",
     hot: true,
     port: 3000,
+    static: {
+      directory: path.join(__dirname, './dist'),
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -33,6 +37,14 @@ const config = {
     }),
     new EslingPlugin({ extensions: "ts" }),
     new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, './src/assets/img'), 
+          to: path.resolve(__dirname, './dist/assets/img') },
+        { from: path.resolve(__dirname, './src/assets/icons'), 
+          to: path.resolve(__dirname, './dist/assets/icons') },
+      ],
+    }),
     // new MiniCssExtractPlugin({
     //   filename: 'index.css',
     // })
