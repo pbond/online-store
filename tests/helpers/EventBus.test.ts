@@ -1,4 +1,5 @@
-import eventBus from "../../src/scripts/helpers/EventBus";
+import eventBus from '../../src/scripts/helpers/EventBus';
+import {eventCallback} from "../../src/types/helpers/IEventBus";
 
 describe('EventBus tests', () => {
   // const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -10,7 +11,7 @@ describe('EventBus tests', () => {
     };
 
     eventBus.on('multiply', multiplier);
-    eventBus.trigger('multiply', [1, 2, 3]);
+    eventBus.trigger<Array<number>>('multiply', [1, 2, 3]);
     expect(data).toStrictEqual([1, 4, 9]);
   });
 
