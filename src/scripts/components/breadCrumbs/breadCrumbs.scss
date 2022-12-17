@@ -1,0 +1,4 @@
+body {
+  color: $color-orang;
+  @extend %opacity-not-active;
+}

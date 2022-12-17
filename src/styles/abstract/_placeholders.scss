@@ -1,0 +1,21 @@
+%font-add {
+  font-family: $font-family-roboto;
+}
+
+%opacity-not-active {
+  opacity: 0.8;
+}
+
+%opacity-active {
+  opacity: 1;
+}
+
+%back-and-color-not-active {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+%back-and-color-active {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: rgba(255, 255, 255, 1);
+}

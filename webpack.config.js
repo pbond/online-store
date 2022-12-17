@@ -37,14 +37,14 @@ const config = {
     }),
     new EslingPlugin({ extensions: "ts" }),
     new CleanWebpackPlugin(),
-    new CopyPlugin({
-      patterns: [
-        { from: path.resolve(__dirname, './src/assets/img'), 
-          to: path.resolve(__dirname, './dist/assets/img') },
-        { from: path.resolve(__dirname, './src/assets/icons'), 
-          to: path.resolve(__dirname, './dist/assets/icons') },
-      ],
-    }),
+    // new CopyPlugin({
+    //   patterns: [
+    //     { from: path.resolve(__dirname, './src/assets/img'), 
+    //       to: path.resolve(__dirname, './dist/assets/img') },
+    //     { from: path.resolve(__dirname, './src/assets/icons'), 
+    //       to: path.resolve(__dirname, './dist/assets/icons') },
+    //   ],
+    // }),
     // new MiniCssExtractPlugin({
     //   filename: 'index.css',
     // })
@@ -64,7 +64,21 @@ const config = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [stylesHandler, "css-loader", "sass-loader"],
+        use: [
+          stylesHandler,
+          "css-loader",
+          "sass-loader",
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: [
+                'src/styles/abstract/_constants.scss',
+                'src/styles/abstract/_mixins.scss',
+                'src/styles/abstract/_placeholders.scss',
+              ]
+            }
+          }
+        ],
       },
       {
         test: /\.(eot|woff|ttf|woff2)?$/i,
