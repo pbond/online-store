@@ -1,12 +1,12 @@
 import eventBus from '../../src/scripts/helpers/EventBus';
-import {eventCallback} from "../../src/types/helpers/IEventBus";
+import { EventCallback } from '../../src/types/helpers/IEventBus';
 
 describe('EventBus tests', () => {
   // const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   it('should add and call callback', () => {
     let data: Array<number> = [];
-    const multiplier = (nums: Array<number>): void => {
+    const multiplier: EventCallback = (nums: Array<number>): void => {
       data = nums.map((n) => n * n);
     };
 
@@ -17,7 +17,7 @@ describe('EventBus tests', () => {
 
   it('should remove callback', () => {
     let data: Array<number> = [];
-    const multiplier = (nums: Array<number>): void => {
+    const multiplier: EventCallback = (nums: Array<number>): void => {
       data = nums.map((n) => n * n);
     };
 
