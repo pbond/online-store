@@ -19,6 +19,9 @@ describe('Webrequest tests', () => {
   };
   const data: ProductResponse = {
     products: [product],
+    limit: 0,
+    skip: 0,
+    total: 1,
   };
 
   it('should get Mock products', async () => {
@@ -36,7 +39,7 @@ describe('Webrequest tests', () => {
 
   it('should get products', async () => {
     global.fetch = fetch as never;
-    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
+    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/productsd?limit=100');
     expect(result).toHaveProperty('products');
   }, 20000);
 });
