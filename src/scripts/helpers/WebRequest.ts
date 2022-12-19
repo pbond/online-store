@@ -20,7 +20,7 @@ export class Webrequest {
       } else {
         console.log('unexpected error: ', error);
       }
-      return Promise.reject();
+      return Promise.resolve({} as T);
     }
   }
 }
