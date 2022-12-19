@@ -1,21 +1,9 @@
 import { Webrequest } from '../../src/scripts/helpers/WebRequest';
 import { ProductResponse } from '../../src/types/models/ProductResponse';
 import { Product } from '../../src/types/models/Product';
-//import fetch from 'node-fetch';
+import fetch from 'node-fetch';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 describe('Webrequest tests', () => {
-  //global.fetch = fetch as any;
-  // global.fetch = jest.fn(() =>
-  //   Promise.resolve({
-  //     ok: true,
-  //     status: 200,
-  //     json: () => Promise.resolve(data),
-  //   })
-  // ) as jest.Mock;
-  beforeEach(async () => {
-    const data = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
-  });
   const product: Product = {
     id: 3,
     title: 'Samsung Universe 9',
@@ -33,8 +21,22 @@ describe('Webrequest tests', () => {
     products: [product],
   };
 
-  it('should get products', async () => {
+  it('should get Mock products', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(data),
+      })
+    ) as jest.Mock;
     const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
-    expect(data).toHaveProperty('products');
+    expect(result).toHaveProperty('products');
+    expect(result.products[0].description).toStrictEqual(data.products[0].description);
   });
+
+  it('should get products', async () => {
+    global.fetch = fetch as never;
+    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
+    expect(result).toHaveProperty('products');
+  }, 20000);
 });

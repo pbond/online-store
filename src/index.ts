@@ -14,7 +14,7 @@ class Application {
   }
 
   async run(): Promise<void> {
-    const data = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
+    const data = await Webrequest.get<ProductResponse>('https://dummyjson.com/productsd?limit=100');
     console.log(data);
     console.log('world');
   }

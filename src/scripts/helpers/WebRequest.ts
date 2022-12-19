@@ -7,12 +7,13 @@ export class Webrequest {
           Accept: 'application/json',
         },
       });
+
       if (!response.ok) {
         console.log(`Sorry, but there is ${response.status} error: ${response.statusText}`);
         throw new Error(`Error! status: ${response.status}`);
       }
-      const result = (await response.json()) as T;
-      return result;
+
+      return (await response.json()) as T;
     } catch (error) {
       if (error instanceof Error) {
         console.log('error message: ', error.message);
