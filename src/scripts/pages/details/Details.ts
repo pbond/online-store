@@ -1,6 +1,6 @@
 import { Page } from '../../../types/pages/Page';
 
-export class Cart extends Page {
+export class Details extends Page {
   constructor(path?: string) {
     super();
     this.element = this.render();
@@ -9,7 +9,7 @@ export class Cart extends Page {
 
   render(): HTMLElement {
     this.element = document.createElement('div');
-    this.element.innerHTML = 'Cart page';
+    this.element.innerHTML = 'Details page';
     return this.element;
   }
 
