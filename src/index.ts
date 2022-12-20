@@ -1,4 +1,5 @@
 import './index.scss';
+import './bootstrap/bootstrap.ts';
 import { IRouter } from './types/router/IRouter';
 import router from './scripts/router/Router';
 import eventBus from './scripts/helpers/EventBus';
