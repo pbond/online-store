@@ -1,19 +1,18 @@
-import { Page } from '../../../types/pages/Page';
-
-export class Cart extends Page {
-  constructor(path?: string) {
-    super();
+export abstract class Page {
+  protected element: HTMLElement;
+  protected path: string;
+  protected constructor(path?: string) {
     this.element = this.render();
     this.path = path ?? '';
   }
 
   render(): HTMLElement {
     this.element = document.createElement('div');
-    this.element.innerHTML = 'Cart page';
+    this.element.innerHTML = this.path;
     return this.element;
   }
 
-  destroy() {
+  destroy(): void {
     this.element.remove();
   }
 }
