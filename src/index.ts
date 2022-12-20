@@ -1,20 +1,39 @@
 import './index.scss';
-import { Card } from './scripts/components/card/Card';
-import { BreadCrumbs } from './scripts/components/breadCrumbs/BreadCrumbs';
+import { IRouter } from './types/router/IRouter';
+import router from './scripts/router/Router';
+import eventBus from './scripts/helpers/EventBus';
+import { Page } from './types/pages/Page';
+import { NotFound } from './scripts/pages/notFound/NotFound';
 
 class Application {
-  protected card: Card;
-  protected breadCrumbs: BreadCrumbs;
+  protected router: IRouter;
+  protected eventBus;
+  protected rootElement: HTMLElement;
+  protected currentPage: Page;
   constructor() {
-    console.log('Hello');
-    this.card = new Card();
-    this.breadCrumbs = new BreadCrumbs();
+    this.router = router;
+    this.eventBus = eventBus;
+    this.rootElement = document.body;
+    this.currentPage = new NotFound();
+  }
+
+  init() {
+    this.renderChild = this.renderChild.bind(this);
+    eventBus.on('changePage', this.renderChild);
+  }
+
+  renderChild(page: Page): void {
+    this.currentPage.destroy();
+    this.currentPage = page;
+    this.rootElement.append(page.render());
   }
 
   run(): void {
-    console.log('world');
+    router.listen();
+    router.navigate();
   }
 }
 
 const app = new Application();
+app.init();
 app.run();
