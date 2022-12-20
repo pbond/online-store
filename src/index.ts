@@ -2,6 +2,8 @@ import './index.scss';
 import './bootstrap/bootstrap.ts';
 import { Card } from './scripts/components/card/Card';
 import { BreadCrumbs } from './scripts/components/breadCrumbs/BreadCrumbs';
+import { Webrequest } from './scripts/helpers/WebRequest';
+import { ProductResponse } from './types/models/ProductResponse';
 
 class Application {
   protected card: Card;
@@ -12,7 +14,9 @@ class Application {
     this.breadCrumbs = new BreadCrumbs();
   }
 
-  run(): void {
+  async run(): Promise<void> {
+    const data = await Webrequest.get<ProductResponse>('https://dummyjson.com/productsd?limit=100');
+    console.log(data);
     console.log('world');
   }
 }
