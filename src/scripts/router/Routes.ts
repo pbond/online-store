@@ -5,6 +5,10 @@ import { Cart } from '../pages/cart/Cart';
 
 export const Routes: IRoute[] = [
   {
+    path: '#/',
+    getPageComponent: (path?: string) => new Main(path),
+  },
+  {
     path: '#/main',
     getPageComponent: (path?: string) => new Main(path),
   },

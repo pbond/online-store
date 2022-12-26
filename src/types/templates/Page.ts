@@ -1,19 +1,18 @@
 export abstract class Page {
-  protected element: HTMLElement;
+  protected container: HTMLElement;
   protected path: string;
 
   protected constructor(path?: string) {
-    this.element = this.render();
+    this.container = document.createElement('div');
     this.path = path ?? '';
   }
 
   render(): HTMLElement {
-    const element = document.createElement('div');
-    element.innerHTML = this.path;
-    return this.element;
+    this.container.innerHTML = this.path;
+    return this.container;
   }
 
   destroy(): void {
-    this.element.remove();
+    this.container.remove();
   }
 }
