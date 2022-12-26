@@ -1,19 +1,18 @@
 import { Routes } from './Routes';
 import { IRoute } from '../../types/router/IRoute';
-import { Main } from '../pages/main/Main';
-import { Page } from '../../types/pages/Page';
+//import { Main } from '../pages/main/Main';
+import { Page } from '../../types/templates/Page';
 import { NotFound } from '../pages/notFound/NotFound';
 import { IRouter } from '../../types/router/IRouter';
 
 class Router implements IRouter {
   private routes: IRoute[];
-  private currentPage: Page;
+  private currentPage: Page | null;
   private rootElement: HTMLElement;
 
   constructor(rootElement: HTMLElement) {
     this.rootElement = rootElement;
-    this.currentPage = new Main();
-    this.routes = [];
+    this.currentPage = null;
     this.routes = Routes;
   }
 
@@ -49,7 +48,7 @@ class Router implements IRouter {
 
     const route = this.routes.find((r) => hash === r.path) ?? this.getNotFoundRoute();
     const page = route.getPageComponent(path);
-    this.currentPage.destroy();
+    this.currentPage?.destroy();
     this.currentPage = page;
     this.rootElement.append(page.render());
   }

@@ -1,19 +1,17 @@
-import { Page } from '../../../types/pages/Page';
+import { Page } from '../../../types/templates/Page';
 
 export class Details extends Page {
   constructor(path?: string) {
     super();
-    this.element = this.render();
     this.path = path ?? '';
   }
 
   render(): HTMLElement {
-    this.element = document.createElement('div');
-    this.element.innerHTML = 'Details page';
-    return this.element;
+    this.container.innerHTML = 'Details page';
+    return this.container;
   }
 
   destroy() {
-    this.element.remove();
+    this.container.remove();
   }
 }
