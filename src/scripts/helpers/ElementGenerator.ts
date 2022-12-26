@@ -1,5 +1,5 @@
 export class ElementGenerator {
-  public static createElementByinnerHtml(innerHTML: string, className?: string): Element {
+  public static createElementByinnerHtml<T extends Element>(innerHTML: string, className?: string): T {
     const container = document.createElement('template');
     container.innerHTML = innerHTML;
     if (!container.firstElementChild) {
@@ -8,14 +8,14 @@ export class ElementGenerator {
     if (className) {
       container.firstElementChild.className = className;
     }
-    return container.firstElementChild;
+    return container.firstElementChild as T;
   }
 
-  public static createElementByName(element: string, className?: string): Element {
+  public static createElementByName<T extends HTMLElement>(element: string, className?: string): T {
     const container = document.createElement(element);
     if (className) {
       container.className = className;
     }
-    return container;
+    return container as T;
   }
 }
