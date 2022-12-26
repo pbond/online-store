@@ -1,4 +1,4 @@
-import { Page } from '../pages/Page';
+import { Page } from '../templates/Page';
 
 export interface IRoute {
   path: string;

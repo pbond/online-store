@@ -1,7 +1,7 @@
 import { Routes } from './Routes';
 import { IRoute } from '../../types/router/IRoute';
 import { Main } from '../pages/main/Main';
-import { Page } from '../../types/pages/Page';
+import { Page } from '../../types/templates/Page';
 import { NotFound } from '../pages/notFound/NotFound';
 import { IRouter } from '../../types/router/IRouter';
 

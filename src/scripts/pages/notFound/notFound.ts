@@ -1,4 +1,4 @@
-import { Page } from '../../../types/pages/Page';
+import { Page } from '../../../types/templates/Page';
 
 export class NotFound extends Page {
   constructor(path?: string) {
