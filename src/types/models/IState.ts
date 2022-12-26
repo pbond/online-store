@@ -7,4 +7,5 @@ export interface IState {
   filteredProducts: IProduct[];
   cart: ICartProducts;
   updateFiler(query: string): void;
+  load(): Promise<void>;
 }

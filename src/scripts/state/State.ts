@@ -1,6 +1,8 @@
 import { ICartProducts } from '../../types/models/ICartProduct';
 import { IProduct } from '../../types/models/IProduct';
 import { IState } from '../../types/models/IState';
+import { Webrequest } from '../helpers/WebRequest';
+import { IProductResponse } from '../../types/models/IProductResponse';
 
 class State implements IState {
   products: IProduct[];
@@ -15,6 +17,11 @@ class State implements IState {
   }
   updateFiler(query: string): void {
     this.filterQuery = query;
+  }
+  async load(): Promise<void> {
+    const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
+    this.products = result.products;
+    this.filteredProducts = result.products;
   }
 }
 
