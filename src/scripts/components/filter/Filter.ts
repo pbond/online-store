@@ -1,6 +1,6 @@
 import { Component } from '../../../types/templates/Component';
 
-interface FiltertGroup {
+interface FilterGroup {
   group: string;
   count: number;
   max: number;
@@ -12,7 +12,7 @@ export class Filter<T extends object> extends Component {
   private etalonList: T[];
   private filteredList: T[];
   private groupArray: string[];
-  private groups: FiltertGroup[];
+  private groups: FilterGroup[];
 
   constructor(tagName: string, className: string, groupName: string, etalonList: T[], filteredList: T[]) {
     super(tagName, className);
@@ -28,14 +28,14 @@ export class Filter<T extends object> extends Component {
         })
       ),
     ];
-    this.groups = this.updateGroups(etalonList, filteredList, this.groupArray);
+    this.groups = this.initGroups(etalonList, filteredList, this.groupArray);
   }
 
   render(): HTMLElement {
     return this.container;
   }
 
-  private updateGroups(etalonList: T[], filteredList: T[], groups: string[]): FiltertGroup[] {
+  private initGroups(etalonList: T[], filteredList: T[], groups: string[]): FilterGroup[] {
     return groups.reduce((acc, group) => {
       const count = filteredList.filter(
         (l) => String(Object.entries(l).find(([k]) => k === this.groupName)?.[1]) === group
@@ -45,6 +45,6 @@ export class Filter<T extends object> extends Component {
       ).length;
       acc.push({ group: group, count: count, max: max });
       return acc;
-    }, [] as FiltertGroup[]);
+    }, [] as FilterGroup[]);
   }
 }

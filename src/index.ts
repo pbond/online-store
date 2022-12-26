@@ -3,9 +3,8 @@ import './bootstrap/bootstrap.ts';
 import { IRouter } from './types/router/IRouter';
 import router from './scripts/router/Router';
 import { Webrequest } from './scripts/helpers/WebRequest';
-import { ProductResponse } from './types/models/ProductResponse';
-import { Filter } from './scripts/components/filter/Filter';
-import { Product } from './types/models/Product';
+import { IProductResponse } from './types/models/IProductResponse';
+import state from './scripts/state/State';
 
 class Application {
   private router: IRouter;
@@ -14,15 +13,9 @@ class Application {
   }
 
   async run(): Promise<void> {
-    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
-    const filter = new Filter<Product>(
-      'div',
-      'filter__category',
-      'brand',
-      result.products,
-      result.products.filter((f) => f.id > 50)
-    );
-    filter.render();
+    const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
+    state.products = result.products;
+    state.filteredProducts = result.products;
     router.listen();
     router.navigate();
   }
