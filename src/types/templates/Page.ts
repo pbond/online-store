@@ -8,8 +8,8 @@ export abstract class Page {
   }
 
   render(): HTMLElement {
-    this.element = document.createElement('div');
-    this.element.innerHTML = this.path;
+    const element = document.createElement('div');
+    element.innerHTML = this.path;
     return this.element;
   }
 
