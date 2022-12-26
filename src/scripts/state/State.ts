@@ -1,8 +1,8 @@
 import { ICartProducts } from '../../types/models/ICartProduct';
 import { IProduct } from '../../types/models/IProduct';
 import { IState } from '../../types/models/IState';
-import {Webrequest} from "../helpers/WebRequest";
-import {IProductResponse} from "../../types/models/IProductResponse";
+import { Webrequest } from '../helpers/WebRequest';
+import { IProductResponse } from '../../types/models/IProductResponse';
 
 class State implements IState {
   products: IProduct[];
