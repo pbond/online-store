@@ -6,6 +6,7 @@ import { IProductResponse } from '../../types/models/IProductResponse';
 import router from '../router/Router';
 import { FilterTypeEnum } from '../../types/enums/FilterTypeEnum';
 import { SortTypeEnum } from '../../types/enums/SortTypeEnum';
+import eventBus from '../helpers/EventBus';
 
 class State implements IState {
   products: IProduct[];
@@ -19,7 +20,7 @@ class State implements IState {
 
   set filterQuery(query: string) {
     this.filterParams = new URLSearchParams(query);
-    this.updateFiler();
+    this.updateFilter();
   }
 
   constructor() {
@@ -29,7 +30,7 @@ class State implements IState {
     this.filterParams = new URLSearchParams();
   }
 
-  updateFiler(): void {
+  updateFilter(): void {
     const names = [...new Set(this.filterParams.keys())];
     this.filteredProducts = this.products;
 
@@ -61,19 +62,24 @@ class State implements IState {
       });
     }
 
-    router.updateQuery(this.filterQuery);
+    eventBus.trigger('updatefilter', this.filteredProducts);
   }
 
   appendSearchParams(name: string, value: string): void {
+    if (!name || !value) {
+      return;
+    }
     this.filterParams.append(name, value);
-    this.updateFiler();
+    this.updateFilter();
+    router.updateQuery(this.filterQuery);
   }
 
   deleteSearchParams(name: string, value: string): void {
     this.filterParams = new URLSearchParams(
       [...this.filterParams].filter(([key, val]) => !(key === name && val === value))
     );
-    this.updateFiler();
+    this.updateFilter();
+    router.updateQuery(this.filterQuery);
   }
 
   async load(): Promise<void> {

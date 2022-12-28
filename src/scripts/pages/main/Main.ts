@@ -4,16 +4,19 @@ import { IProduct } from '../../../types/models/IProduct';
 import state from '../../state/State';
 
 export class Main extends Page {
-  brandsFilter: Filter<IProduct>;
+  private brandsFilter: Filter<IProduct>;
+  private categorysFilter: Filter<IProduct>;
 
   constructor(path?: string) {
     super(path);
-    this.brandsFilter = new Filter<IProduct>('div', 'filter__brand', 'brand', state.products, state.filteredProducts);
+    state.filterQuery = path ?? '';
+    this.brandsFilter = new Filter<IProduct>('div', 'filter__brand', 'brand', state.products).init();
+    this.categorysFilter = new Filter<IProduct>('div', 'filter__category', 'category', state.products).init();
   }
 
   render(): HTMLElement {
     this.container.append(this.brandsFilter.render());
-    //const f1 = 0;
+    this.container.append(this.categorysFilter.render());
     return this.container;
   }
 }
