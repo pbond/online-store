@@ -1,0 +1,23 @@
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+.card:hover {
+  .card-header {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .card-body {
+    background-color: rgba(10, 10, 10, 0.03);
+  }
+
+  .remove-icon {
+    display: block;
+  }
+
+}
+
+.remove-icon {
+  display: none;
+  transition: all 0.3s ease;
+}

@@ -6,3 +6,10 @@ export interface ICartProducts {
     count: number;
   };
 }
+
+// interface ICartProduct {
+//   product: IProduct;
+//   count: number;
+// }
+//
+// export type ICartProducts = Record<string, ICartProduct>

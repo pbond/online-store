@@ -9,4 +9,8 @@ export abstract class Component {
   render(): HTMLElement {
     return this.container;
   }
+
+  destroy(): void {
+    this.container.remove();
+  }
 }
