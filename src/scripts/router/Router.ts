@@ -42,6 +42,11 @@ class Router implements IRouter {
     // });
   }
 
+  updateQuery(query: string): void {
+    const [hash] = window.location.hash.split('?');
+    window.history.pushState('', '', `${hash}${query ? '?' + query : ''}`);
+  }
+
   navigate(): void {
     const [hash, path] = window.location.hash.split('?');
     // window.history.pushState(null, '', hashpath);
