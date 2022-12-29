@@ -35,24 +35,14 @@ export class Filter<T extends object> extends Component {
       ),
     ];
     this.groups = this.initGroups(this.etalonList, this.groupValues);
+    this.checkBoxEventHandler = this.checkBoxEventHandler.bind(this);
   }
 
   init(): Filter<T> {
     eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
       this.update(filteredProducts);
     });
-    this.checkBoxEventHandler = this.checkBoxEventHandler.bind(this);
     return this;
-  }
-
-  update(filteredProducts: IProduct[]): void {
-    this.groups.forEach((group) => {
-      this.updateFilterProperties(group, filteredProducts);
-    });
-  }
-
-  private isChecked(group: FilterGroup): boolean {
-    return state.filterParams.getAll(this.groupName).some((param) => param === group.name);
   }
 
   render(): HTMLElement {
@@ -67,6 +57,7 @@ export class Filter<T extends object> extends Component {
     this.container.classList.add('filter__container');
     this.container.append(title);
     this.container.append(elementsContainer);
+    this.init();
     return this.container;
   }
 
@@ -92,6 +83,16 @@ export class Filter<T extends object> extends Component {
     label.append(countSpan);
     item.append(label);
     return item;
+  }
+
+  private update(filteredProducts: IProduct[]): void {
+    this.groups.forEach((group) => {
+      this.updateFilterProperties(group, filteredProducts);
+    });
+  }
+
+  private isChecked(group: FilterGroup): boolean {
+    return state.filterParams.getAll(this.groupName).some((param) => param === group.name);
   }
 
   private updateFilterProperties<T>(group: FilterGroup, list: T[]): void {
