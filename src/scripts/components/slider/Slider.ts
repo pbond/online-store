@@ -71,6 +71,13 @@ export class Slider<T extends object> extends Component {
     return this.container;
   }
 
+  init(): Slider<T> {
+    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
+      this.updateSliderProperties(filteredProducts);
+    });
+    return this;
+  }
+
   private sliderChangeEventHandler(values: (string | number)[], handleNumber: number) {
     const paramName = handleNumber === 0 ? `sl-${this.propertyName}-from` : `sl-${this.propertyName}-to`;
     state.setSearchParams(paramName, Math.floor(Number(values[handleNumber])).toString());
@@ -109,13 +116,6 @@ export class Slider<T extends object> extends Component {
       this.slider.noUiSlider?.set([min, max]);
       this.slider.noUiSlider?.on('update', this.sliderUpdateEventHandler.bind(this));
     }
-  }
-
-  init(): Slider<T> {
-    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
-      this.updateSliderProperties(filteredProducts);
-    });
-    return this;
   }
 
   private getMin<T>(list: T[], propertyName: string): number {

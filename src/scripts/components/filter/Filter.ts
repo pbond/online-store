@@ -95,7 +95,16 @@ export class Filter<T extends object> extends Component {
   }
 
   private updateFilterProperties<T>(group: FilterGroup, list: T[]): void {
-    group.count = this.getItemsByGroupValue(list, group.name).length;
+    if (!this.isChecked(group)) {
+      const filterParams = new URLSearchParams(state.filterQuery);
+      filterParams.append(this.groupName, group.name);
+      const posibleFilteredProducts = state.getFilteredProducts(state.products, filterParams);
+      group.count = this.getItemsByGroupValue(posibleFilteredProducts, group.name).length;
+    } else {
+      group.count = this.getItemsByGroupValue(list, group.name).length;
+    }
+
+    //group.count = this.getItemsByGroupValue(list, group.name).length;
     group.max = this.getItemsByGroupValue(this.etalonList, group.name).length;
     if (group.checkBox) {
       group.checkBox.removeEventListener('change', this.checkBoxEventHandler);
