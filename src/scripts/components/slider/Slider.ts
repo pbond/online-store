@@ -64,10 +64,10 @@ export class Slider<T extends object> extends Component {
     });
     this.min = this.defaultMin;
     this.max = this.defaultMax;
-    this.slider.noUiSlider?.on('change', this.sliderChangeEventHandler.bind(this));
     this.updateSliderProperties(state.filteredProducts);
     this.container.classList.add('slider__container');
     this.container.append(wrapper);
+    this.init();
     return this.container;
   }
 
@@ -75,6 +75,7 @@ export class Slider<T extends object> extends Component {
     eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
       this.updateSliderProperties(filteredProducts);
     });
+    this.slider?.noUiSlider?.on('change', this.sliderChangeEventHandler.bind(this));
     return this;
   }
 

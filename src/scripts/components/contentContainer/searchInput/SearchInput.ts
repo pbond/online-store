@@ -21,13 +21,13 @@ export class SearchInput extends Component {
       ariaDescribedby: 'inputGroup-sizing-sm',
     });
     this.updateProperties();
-    this.input.addEventListener('input', this.inputEventHandler.bind(this));
     this.init();
     this.container.append(this.input);
     return this.container;
   }
 
   init(): SearchInput {
+    this.input?.addEventListener('input', this.inputEventHandler.bind(this));
     return this;
   }
 
