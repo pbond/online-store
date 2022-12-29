@@ -31,29 +31,61 @@ class State implements IState {
   }
 
   updateFilter(): void {
-    const names = [...new Set(this.filterParams.keys())];
-    this.filteredProducts = this.products;
+    this.filteredProducts = this.getFilteredProducts(this.products, this.filterParams);
+    eventBus.trigger('updatefilter', this.filteredProducts);
+  }
 
-    const groupNames = names.filter((n) => n !== FilterTypeEnum.Search && n !== FilterTypeEnum.Sort);
+  getFilteredProducts(products: IProduct[], filterParams: URLSearchParams): IProduct[] {
+    const names = [...new Set(filterParams.keys())];
+    let filteredProducts = products;
+
+    const groupNames = names.filter(
+      (n) =>
+        n !== FilterTypeEnum.Search &&
+        n !== FilterTypeEnum.Sort &&
+        !n.startsWith('sl-') &&
+        !n.endsWith('-from') &&
+        !n.endsWith('-to')
+    );
     groupNames.forEach((name) => {
-      const values = this.filterParams.getAll(name);
-      this.filteredProducts = this.filteredProducts.filter((product) =>
+      const values = filterParams.getAll(name);
+      filteredProducts = filteredProducts.filter((product) =>
         values.some((v) => v === Object.getOwnPropertyDescriptor(product, name)?.value)
       );
     });
 
-    const searchValue = this.filterParams.get(FilterTypeEnum.Search);
+    let sliderNames = names
+      .filter((n) => n.startsWith('sl-') && (n.endsWith('-from') || n.endsWith('-to')))
+      .map((n) => n.replace('sl-', '').replace('-from', '').replace('-to', ''));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    sliderNames = [...new Set(sliderNames)];
+    sliderNames.forEach((name) => {
+      const from = filterParams.get(`sl-${name}-from`);
+      const to = filterParams.get(`sl-${name}-to`);
+      if (from) {
+        filteredProducts = filteredProducts.filter(
+          (product) => Number(Object.getOwnPropertyDescriptor(product, name)?.value) >= Number(from)
+        );
+      }
+      if (to) {
+        filteredProducts = filteredProducts.filter(
+          (product) => Number(Object.getOwnPropertyDescriptor(product, name)?.value) <= Number(to)
+        );
+      }
+    });
+
+    const searchValue = filterParams.get(FilterTypeEnum.Search);
     if (searchValue) {
-      this.filteredProducts = this.filteredProducts.filter((product) =>
+      filteredProducts = filteredProducts.filter((product) =>
         Object.values(product).some((v) => String(v).toLowerCase().includes(searchValue?.toLowerCase()))
       );
     }
 
-    const sortValue = this.filterParams.get(FilterTypeEnum.Sort);
+    const sortValue = filterParams.get(FilterTypeEnum.Sort);
     //const sortValue = 'id-Desc';
     if (sortValue) {
       const [sortName, sortType] = sortValue.split('-');
-      this.filteredProducts.sort((a, b) => {
+      filteredProducts.sort((a, b) => {
         return this.comparer(
           Object.getOwnPropertyDescriptor(a, sortName)?.value,
           Object.getOwnPropertyDescriptor(b, sortName)?.value,
@@ -61,8 +93,16 @@ class State implements IState {
         );
       });
     }
+    return filteredProducts;
+  }
 
-    eventBus.trigger('updatefilter', this.filteredProducts);
+  setSearchParams(name: string, value: string): void {
+    if (!name || !value) {
+      return;
+    }
+    this.filterParams.set(name, value);
+    this.updateFilter();
+    router.updateQuery(this.filterQuery);
   }
 
   appendSearchParams(name: string, value: string): void {
@@ -78,6 +118,11 @@ class State implements IState {
     this.filterParams = new URLSearchParams(
       [...this.filterParams].filter(([key, val]) => !(key === name && val === value))
     );
+    this.updateFilter();
+    router.updateQuery(this.filterQuery);
+  }
+  deleteAllSearchParamsByName(name: string): void {
+    this.filterParams.delete(name);
     this.updateFilter();
     router.updateQuery(this.filterQuery);
   }

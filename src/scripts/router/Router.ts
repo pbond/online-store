@@ -48,9 +48,14 @@ class Router implements IRouter {
   }
 
   navigate(): void {
-    const [hash, path] = window.location.hash.split('?');
+    let hash = '';
+    let path = '';
+    [hash, path] = window.location.hash.split('?');
     // window.history.pushState(null, '', hashpath);
-
+    if (!hash) {
+      hash = '#/main';
+      window.history.pushState('', '', `${hash}`);
+    }
     const route = this.routes.find((r) => hash === r.path) ?? this.getNotFoundRoute();
     const page = route.getPageComponent(path);
     this.currentPage?.destroy();
