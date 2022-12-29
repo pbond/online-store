@@ -57,7 +57,6 @@ class State implements IState {
     let sliderNames = names
       .filter((n) => n.startsWith('sl-') && (n.endsWith('-from') || n.endsWith('-to')))
       .map((n) => n.replace('sl-', '').replace('-from', '').replace('-to', ''));
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     sliderNames = [...new Set(sliderNames)];
     sliderNames.forEach((name) => {
       const from = filterParams.get(`sl-${name}-from`);
