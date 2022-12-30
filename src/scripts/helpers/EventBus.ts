@@ -1,6 +1,6 @@
 import { EventCallback, EventsDictionary } from '../../types/helpers/IEventBus';
 
-type EnentBusType = 'updatefilter' | 'updatecart';
+type EnentBusType = 'updatefilter' | 'updatecart' | 'addProductToCart' | 'removeProductFromCart';
 
 class EventBus {
   private readonly events: EventsDictionary;

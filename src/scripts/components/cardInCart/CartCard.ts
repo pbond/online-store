@@ -37,7 +37,7 @@ export class CartCard extends Component {
     titleColumn.append(anchor);
     this.elements.headerRow.append(titleColumn, priceColumn);
     this.elements.cardHeader.append(this.elements.headerRow);
-    return this.elements.cardHeader;
+    return this.elements.cardHeader as HTMLDivElement;
   }
 
   private createCardBody(): HTMLDivElement {
@@ -121,7 +121,6 @@ export class CartCard extends Component {
 
   private createTotalPrice(): HTMLDivElement {
     const totalRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row w-100' });
-    const totalPrice = ElementGenerator.createCustomElement<>('div', { className: ''});
     const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'col-8 d-flex align-items-center',
       innerText: this.product.price * this.count,

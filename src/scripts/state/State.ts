@@ -129,6 +129,10 @@ class State implements IState {
     const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
     this.products = result.products;
     this.filteredProducts = result.products;
+    const cartProducts = localStorage.getItem('cartProducts');
+    if (cartProducts !== null) {
+      this.cart = JSON.parse(cartProducts);
+    }
   }
 
   private comparer(a: string | number, b: string | number, sortType: SortTypeEnum): number {
