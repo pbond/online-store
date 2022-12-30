@@ -2,6 +2,7 @@ import { Page } from '../../../types/templates/Page';
 import { Filter } from '../../../scripts/components/filter/Filter';
 import { Slider } from '../../../scripts/components/slider/Slider';
 import { SearchInput } from '../../components/contentContainer/searchInput/SearchInput';
+import { SortSelector } from '../../components/contentContainer/sortSelector/SortSelector';
 import { IProduct } from '../../../types/models/IProduct';
 import state from '../../state/State';
 import { FilterTypeEnum } from '../../../types/enums/FilterTypeEnum';
@@ -13,10 +14,12 @@ export class Main extends Page {
   private priceSlider: Slider<IProduct>;
   private stockSlider: Slider<IProduct>;
   private search: SearchInput;
+  private sortSelector: SortSelector;
 
   constructor(path?: string) {
     super(path);
     state.filterQuery = path ?? '';
+    this.sortSelector = new SortSelector('div', 'filter__sort', ['price', 'rating', 'stock']);
     this.search = new SearchInput('div', 'filter__search');
     this.brandsFilter = new Filter<IProduct>('div', 'filter__brand', FilterTypeEnum.Brand, state.products);
     this.categorysFilter = new Filter<IProduct>('div', 'filter__category', FilterTypeEnum.Category, state.products);
@@ -31,6 +34,7 @@ export class Main extends Page {
     const productsList = ElementGenerator.createCustomElement<HTMLElement>('div', { className: 'products__list' });
     products.append(productsHeader);
     products.append(productsList);
+    filters.append(this.sortSelector.render());
     filters.append(this.search.render());
     filters.append(this.brandsFilter.render());
     filters.append(this.categorysFilter.render());
