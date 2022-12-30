@@ -30,6 +30,15 @@ export class SortSelector extends Component {
       className: 'sort__select form-select',
     });
 
+    const optiontitle = ElementGenerator.createCustomElement<HTMLOptionElement>('option', {
+      className: 'sort__item',
+      disabled: true,
+      value: 'title',
+      text: 'Sort options:',
+      selected: true,
+    });
+    this.select?.options.add(optiontitle);
+
     this.sortOptions.forEach((option) => {
       const optionElement = ElementGenerator.createCustomElement<HTMLOptionElement>('option', {
         className: 'sort__item',
