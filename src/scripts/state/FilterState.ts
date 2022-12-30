@@ -17,6 +17,7 @@ export class FilterState implements IFilterState {
   set filterQuery(query: string) {
     this.filterParams = new URLSearchParams(query);
     this.updateFilter();
+    router.updateQuery(this.filterQuery);
   }
 
   constructor(products: IProduct[]) {

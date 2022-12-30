@@ -6,6 +6,7 @@ import { SearchInput } from '../../components/contentContainer/searchInput/Searc
 import { IProduct } from '../../../types/models/IProduct';
 import { FilterTypeEnum } from '../../../types/enums/FilterTypeEnum';
 import state from '../../state/State';
+import { Button } from '../../../scripts/components/button/Button';
 import './filterSidebar.scss';
 
 export class FilterSidebar extends Component {
@@ -14,9 +15,13 @@ export class FilterSidebar extends Component {
   private priceSlider: Slider<IProduct>;
   private stockSlider: Slider<IProduct>;
   private search: SearchInput;
+  private copyButton: Button;
+  private clearButton: Button;
 
   constructor(tagName: string, className: string) {
     super(tagName, className);
+    this.clearButton = new Button('filter__reset btn btn-primary', 'Reset Filters', this.clearEventHandler.bind(this));
+    this.copyButton = new Button('filter__copy btn btn-primary', 'Copy Link', this.copyEventHandler.bind(this));
     this.search = new SearchInput('div', 'filter__search');
     this.brandsFilter = new Filter<IProduct>('div', 'filter__brand', FilterTypeEnum.Brand, state.products);
     this.categorysFilter = new Filter<IProduct>('div', 'filter__category', FilterTypeEnum.Category, state.products);
@@ -30,13 +35,19 @@ export class FilterSidebar extends Component {
       id: 'sidebarMenu',
     });
     const navcontainer = ElementGenerator.createCustomElement<HTMLElement>('div', {
-      className: 'sidebar__content position-sticky',
+      className: 'sidebar__content d-flex flex-column position-sticky',
     });
+    const buttonsContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'filter__buttons d-flex flex-column',
+    });
+    buttonsContainer.append(this.clearButton.render());
+    buttonsContainer.append(this.copyButton.render());
     navcontainer.append(this.search.render());
     navcontainer.append(this.brandsFilter.render());
     navcontainer.append(this.categorysFilter.render());
     navcontainer.append(this.priceSlider.render());
     navcontainer.append(this.stockSlider.render());
+    navcontainer.append(buttonsContainer);
     navElement.append(navcontainer);
     this.container.append(navElement);
     return this.container;
@@ -44,5 +55,24 @@ export class FilterSidebar extends Component {
 
   init(): FilterSidebar {
     return this;
+  }
+
+  private clearEventHandler(): void {
+    if (state.filter) {
+      state.filter.filterQuery = '';
+      this.search.value = '';
+    }
+  }
+
+  private copyEventHandler(event: MouseEvent): void {
+    const currentTarget = event.target;
+    if (currentTarget instanceof HTMLButtonElement) {
+      const currenText = currentTarget.textContent;
+      currentTarget.textContent = 'Copied';
+      navigator.clipboard.writeText(window.location.href);
+      setTimeout(() => {
+        currentTarget.textContent = currenText;
+      }, 500);
+    }
   }
 }

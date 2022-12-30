@@ -6,6 +6,15 @@ import './searchInput.scss';
 
 export class SearchInput extends Component {
   private input: HTMLInputElement | null;
+  get value() {
+    return this.input?.value ?? '';
+  }
+  set value(value: string) {
+    if (this.input) {
+      this.input.value = value;
+    }
+  }
+
   constructor(tagName: string, className: string) {
     super(tagName, className);
     this.input = null;

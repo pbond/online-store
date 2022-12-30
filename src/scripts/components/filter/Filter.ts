@@ -4,22 +4,14 @@ import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
 import './filter.scss';
 import { IProduct } from '../../../types/models/IProduct';
-
-interface FilterGroup {
-  name: string;
-  count: number;
-  max: number;
-  checkBox?: HTMLInputElement;
-  nameSpan?: HTMLSpanElement;
-  countSpan?: HTMLSpanElement;
-}
+import { IFilterGroup } from '../../../types/models/IFilterGroup';
 
 //export class Filter<T extends { [key: string]: unknown }> extends Component {
 export class Filter<T extends object> extends Component {
   private groupName: string;
   private etalonList: T[];
   private groupValues: string[];
-  private groups: FilterGroup[];
+  private groups: IFilterGroup[];
 
   constructor(tagName: string, className: string, groupName: string, etalonList: T[]) {
     super(tagName, className);
@@ -61,7 +53,7 @@ export class Filter<T extends object> extends Component {
     return this.container;
   }
 
-  createFilterItem(group: FilterGroup): HTMLElement {
+  createFilterItem(group: IFilterGroup): HTMLElement {
     const item = ElementGenerator.createCustomElement<HTMLLIElement>('li', { className: 'filter__item' });
     const label = ElementGenerator.createCustomElement<HTMLLabelElement>('label', {
       className: 'filter__label form-check-label',
@@ -93,14 +85,14 @@ export class Filter<T extends object> extends Component {
     });
   }
 
-  private isChecked(group: FilterGroup): boolean {
+  private isChecked(group: IFilterGroup): boolean {
     if (!state.filter) {
       return false;
     }
     return state.filter.filterParams.getAll(this.groupName).some((param) => param === group.name);
   }
 
-  private updateFilterProperties<T>(group: FilterGroup, list: T[]): void {
+  private updateFilterProperties<T>(group: IFilterGroup, list: T[]): void {
     if (!this.isChecked(group)) {
       const filterParams = new URLSearchParams(state.filter?.filterQuery);
       filterParams.append(this.groupName, group.name);
@@ -138,12 +130,12 @@ export class Filter<T extends object> extends Component {
     }
   }
 
-  private initGroups(etalonList: T[], groupValues: string[]): FilterGroup[] {
+  private initGroups(etalonList: T[], groupValues: string[]): IFilterGroup[] {
     return groupValues.reduce((acc, value) => {
       const count = this.getItemsByGroupValue(etalonList, value).length;
       acc.push({ name: value, count: count, max: count });
       return acc;
-    }, [] as FilterGroup[]);
+    }, [] as IFilterGroup[]);
   }
 
   private getItemsByGroupValue<T>(list: T[], groupValue: string): T[] {
