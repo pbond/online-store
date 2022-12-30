@@ -8,4 +8,5 @@ export interface IState {
   cart: ICartProducts;
   updateFiler(query: string): void;
   load(): Promise<void>;
+  emulateCart(): void;
 }

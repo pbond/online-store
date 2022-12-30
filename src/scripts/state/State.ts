@@ -13,15 +13,24 @@ class State implements IState {
     this.products = [];
     this.filterQuery = '';
     this.filteredProducts = [];
-    this.cart = {};
+    this.cart = [];
   }
   updateFiler(query: string): void {
     this.filterQuery = query;
   }
+
   async load(): Promise<void> {
     const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
     this.products = result.products;
     this.filteredProducts = result.products;
+  }
+
+  emulateCart(): void {
+    const cart = localStorage.getItem('cart');
+    if (cart != null) {
+      this.cart = JSON.parse(cart);
+    }
+    this.cart = this.products.slice(0, 15).map((product, index) => ({ product, count: index }));
   }
 }
 

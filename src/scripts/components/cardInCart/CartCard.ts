@@ -6,10 +6,12 @@ import eventBus from '../../helpers/EventBus';
 
 export class CartCard extends Component {
   product: IProduct;
+  count = 0;
 
-  constructor(product: IProduct) {
+  constructor(product: IProduct, count: number) {
     super('div', 'card');
     this.product = product;
+    this.count = count;
   }
 
   render(): HTMLElement {
@@ -19,8 +21,10 @@ export class CartCard extends Component {
   }
 
   private createCardHeader(): HTMLDivElement {
-    const cardHeader = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'card-header' });
-    const headerRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row' });
+    this.elements.cardHeader = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'card-header',
+    });
+    this.elements.headerRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row' });
     const titleColumn = ElementGenerator.createCustomElement('div', { className: 'col-9' });
     const priceColumn = ElementGenerator.createCustomElement('div', {
       className: 'col-3 fw-bold',
@@ -31,9 +35,9 @@ export class CartCard extends Component {
       innerText: this.product.title,
     });
     titleColumn.append(anchor);
-    headerRow.append(titleColumn, priceColumn);
-    cardHeader.append(headerRow);
-    return cardHeader;
+    this.elements.headerRow.append(titleColumn, priceColumn);
+    this.elements.cardHeader.append(this.elements.headerRow);
+    return this.elements.cardHeader;
   }
 
   private createCardBody(): HTMLDivElement {
@@ -76,7 +80,9 @@ export class CartCard extends Component {
 
   private createControls(): HTMLDivElement {
     const controlsRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row w-100' });
-    const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'col-8 d-flex' });
+    const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'col-8 d-flex align-items-center',
+    });
     const inputGroup = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'input-group' });
 
     inputGroup.append(
@@ -115,9 +121,10 @@ export class CartCard extends Component {
 
   private createTotalPrice(): HTMLDivElement {
     const totalRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row w-100' });
+    const totalPrice = ElementGenerator.createCustomElement<>('div', { className: ''});
     const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'col-8 d-flex',
-      // innerText: this.product.price * this.
+      className: 'col-8 d-flex align-items-center',
+      innerText: this.product.price * this.count,
     });
     totalRow.append(controlsCol);
     return totalRow;
@@ -133,45 +140,11 @@ export class CartCard extends Component {
 
   private addItem(): void {
     console.log('add item');
-    eventBus.trigger('', 1);
+    eventBus.trigger('addProductToCart', this.product.id);
   }
 
   private removeItem(): void {
     console.log('remove item');
-    eventBus.trigger('', 1);
+    eventBus.trigger('removeProductFromCart', this.product.id);
   }
 }
-
-//Как лучше привязывать события к контролам, которые генерируются кодом?
-
-// <div class="card">
-// <div class="card-header">
-// <a href="#">Product name</a>
-// </div>
-// <div class="card-body">
-// <div class="row">
-// <div class="col-3">
-// <img src="" alt="product image" />
-//   </div>
-//   <div class="col-6">
-//   Product description
-// </div>
-// <div class="col-3">
-// <div class="row">
-// <div class="col-8">
-// <div class="input-group amount-controls">
-// <button class="btn btn-outline-secondary form-control">-</button>
-//   <label>
-//    <input type="number" min="0" max="100" step="1" value="0" class="form-control text-center border-0"/>
-//   </label>
-//   <button class="btn btn-outline-secondary form-control">+</button>
-//   </div>
-//   </div>
-//   <div class="col-4 d-flex align-content-center flex-wrap">
-//   $123,456
-// </div>
-// </div>
-// </div>
-// </div>
-// </div>
-// </div>

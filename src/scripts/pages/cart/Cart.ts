@@ -9,8 +9,8 @@ export class Cart extends Page {
   }
 
   render(): HTMLElement {
-    state.products.slice(0, 10).forEach((product) => {
-      const card = new CartCard(product);
+    state.cart.forEach((cartItem) => {
+      const card = new CartCard(cartItem.product, cartItem.count);
       this.container.append(card.render());
     });
     return this.container;
