@@ -14,7 +14,7 @@ export class SearchInput extends Component {
   render(): HTMLElement {
     this.input = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
       className: 'serch__input form-control',
-      type: 'text',
+      type: 'search',
       placeholder: 'Search...',
       autocomplete: 'off',
       ariaLabel: 'Small',
