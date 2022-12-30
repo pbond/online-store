@@ -12,4 +12,5 @@ export interface IState {
   deleteSearchParams(name: string, value: string): void;
   deleteAllSearchParamsByName(name: string): void;
   load(): Promise<void>;
+  emulateCart(): void;
 }

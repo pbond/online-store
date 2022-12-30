@@ -64,6 +64,6 @@ class Router implements IRouter {
   }
 }
 
-const router = new Router(document.body);
+const router = new Router(document.querySelector('#application') as HTMLDivElement);
 
 export default router;

@@ -26,8 +26,8 @@ class State implements IState {
   constructor() {
     this.products = [];
     this.filteredProducts = [];
-    this.cart = {};
     this.filterParams = new URLSearchParams();
+    this.cart = [];
   }
 
   updateFilter(): void {

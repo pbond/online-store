@@ -1,6 +1,6 @@
-import './card.scss';
+import './vitrineCard.scss';
 
-export class Card {
+export class VitrineCard {
   constructor() {
     console.log('Hello');
   }

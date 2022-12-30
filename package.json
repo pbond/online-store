@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
-    "nouislider": "^15.6.1"
+    "nouislider": "^15.6.1",
+    "bootstrap-icons": "^1.10.3"
   }
 }

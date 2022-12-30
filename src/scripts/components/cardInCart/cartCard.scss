@@ -1,0 +1,13 @@
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+.card:hover {
+  .remove-icon {
+    display: block;
+  }
+}
+
+.remove-icon {
+  display: none;
+}
