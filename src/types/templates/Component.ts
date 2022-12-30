@@ -14,6 +14,10 @@ export abstract class Component {
     return this.container;
   }
 
+  init(): Component {
+    return this;
+  }
+
   destroy(): void {
     this.container.remove();
   }

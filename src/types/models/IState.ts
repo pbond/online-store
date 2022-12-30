@@ -6,7 +6,11 @@ export interface IState {
   filterQuery: string;
   filteredProducts: IProduct[];
   cart: ICartProducts;
-  updateFiler(query: string): void;
+  updateFilter(): void;
+  setSearchParams(name: string, value: string): void;
+  appendSearchParams(name: string, value: string): void;
+  deleteSearchParams(name: string, value: string): void;
+  deleteAllSearchParamsByName(name: string): void;
   load(): Promise<void>;
   emulateCart(): void;
 }
