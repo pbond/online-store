@@ -37,7 +37,7 @@ class State implements IState {
 
   getFilteredProducts(products: IProduct[], filterParams: URLSearchParams): IProduct[] {
     const names = [...new Set(filterParams.keys())];
-    let filteredProducts = products;
+    let filteredProducts = [...products];
 
     const groupNames = names.filter(
       (n) =>
@@ -81,7 +81,6 @@ class State implements IState {
     }
 
     const sortValue = filterParams.get(FilterTypeEnum.Sort);
-    //const sortValue = 'id-Desc';
     if (sortValue) {
       const [sortName, sortType] = sortValue.split('-');
       filteredProducts.sort((a, b) => {
