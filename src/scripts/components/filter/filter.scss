@@ -1,0 +1,52 @@
+.filter__container {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 0.25em;
+  margin: 0.1em;
+}
+
+.filter__elements {
+  list-style-type: none;
+  margin-bottom: 0;
+  padding-left: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #0000003f;
+  }
+    
+  &::-webkit-scrollbar-thumb {
+    background-color:  #0000003e;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #0000007d;
+  }
+  
+  &::-webkit-scrollbar-button:horizontal:end:increment,
+  &::-webkit-scrollbar-button:horizontal:start:decrement,
+  &::-webkit-scrollbar-button:vertical:end:increment,
+  &::-webkit-scrollbar-button:vertical:start:decrement {
+    display: none;
+  }
+}
+
+.filter__label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  
+  &:hover {
+    .filter__checkbox{
+      border-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+  
+}
+
+.filter__checkbox {
+  margin-right: 5px;
+  cursor: pointer;
+}
