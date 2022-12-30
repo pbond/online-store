@@ -35,16 +35,16 @@ export class SearchInput extends Component {
     const targetElement = e.target;
     if (targetElement instanceof HTMLInputElement) {
       if (targetElement.value) {
-        state.setSearchParams(FilterTypeEnum.Search, targetElement.value);
+        state.filter?.setSearchParams(FilterTypeEnum.Search, targetElement.value);
       } else {
-        state.deleteAllSearchParamsByName(FilterTypeEnum.Search);
+        state.filter?.deleteAllSearchParamsByName(FilterTypeEnum.Search);
       }
     }
   }
 
   private updateProperties() {
     if (this.input) {
-      const value = state.filterParams.get(FilterTypeEnum.Search);
+      const value = state.filter?.filterParams.get(FilterTypeEnum.Search);
       this.input.value = value ?? '';
     }
   }

@@ -76,7 +76,9 @@ export class Filter<T extends object> extends Component {
     group.checkBox = checkbox;
     group.nameSpan = nameSpan;
     group.countSpan = countSpan;
-    this.updateFilterProperties(group, state.filteredProducts);
+    if (state.filter) {
+      this.updateFilterProperties(group, state.filter.filteredProducts);
+    }
     checkbox.addEventListener('change', this.checkBoxEventHandler);
     label.append(checkbox);
     label.append(nameSpan);
@@ -92,15 +94,20 @@ export class Filter<T extends object> extends Component {
   }
 
   private isChecked(group: FilterGroup): boolean {
-    return state.filterParams.getAll(this.groupName).some((param) => param === group.name);
+    if (!state.filter) {
+      return false;
+    }
+    return state.filter.filterParams.getAll(this.groupName).some((param) => param === group.name);
   }
 
   private updateFilterProperties<T>(group: FilterGroup, list: T[]): void {
     if (!this.isChecked(group)) {
-      const filterParams = new URLSearchParams(state.filterQuery);
+      const filterParams = new URLSearchParams(state.filter?.filterQuery);
       filterParams.append(this.groupName, group.name);
-      const posibleFilteredProducts = state.getFilteredProducts(state.products, filterParams);
-      group.count = this.getItemsByGroupValue(posibleFilteredProducts, group.name).length;
+      const posibleFilteredProducts = state.filter?.getFilteredProducts(state.products, filterParams);
+      if (posibleFilteredProducts) {
+        group.count = this.getItemsByGroupValue(posibleFilteredProducts, group.name).length;
+      }
     } else {
       group.count = this.getItemsByGroupValue(list, group.name).length;
     }
@@ -124,9 +131,9 @@ export class Filter<T extends object> extends Component {
     const targetElement = e.target;
     if (targetElement instanceof HTMLInputElement) {
       if (targetElement.checked) {
-        state.appendSearchParams(this.groupName, targetElement.value);
+        state.filter?.appendSearchParams(this.groupName, targetElement.value);
       } else {
-        state.deleteSearchParams(this.groupName, targetElement.value);
+        state.filter?.deleteSearchParams(this.groupName, targetElement.value);
       }
     }
   }

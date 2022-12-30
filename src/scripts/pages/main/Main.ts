@@ -10,7 +10,9 @@ export class Main extends Page {
 
   constructor(path?: string) {
     super(path);
-    state.filterQuery = path ?? '';
+    if (state.filter) {
+      state.filter.filterQuery = path ?? '';
+    }
     this.filterSidebar = new FilterSidebar('aside', 'shop__filters');
     this.sortSelector = new SortSelector('div', 'filter__sort', ['price', 'rating', 'stock']);
   }

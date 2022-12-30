@@ -63,7 +63,7 @@ export class SortSelector extends Component {
     if (targetElement instanceof HTMLSelectElement) {
       const option = targetElement.options[targetElement.selectedIndex];
       if (option.value) {
-        state.setSearchParams(FilterTypeEnum.Sort, option.value);
+        state.filter?.setSearchParams(FilterTypeEnum.Sort, option.value);
       }
     }
   }
@@ -72,7 +72,7 @@ export class SortSelector extends Component {
     if (!this.select) {
       return;
     }
-    const value = state.filterParams.get(FilterTypeEnum.Sort);
+    const value = state.filter?.filterParams.get(FilterTypeEnum.Sort);
     if (!value) {
       return;
     }
