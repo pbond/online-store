@@ -13,7 +13,6 @@ class Application {
 
   async run(): Promise<void> {
     await state.load();
-    state.emulateCart();
     router.listen();
     router.navigate();
   }
