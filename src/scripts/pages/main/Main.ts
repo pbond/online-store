@@ -1,11 +1,9 @@
 import { Page } from '../../../types/templates/Page';
 import { FilterSidebar } from '../../../scripts/components/filterSidebar/FilterSidebar';
-import { SortSelector } from '../../components/contentContainer/sortSelector/SortSelector';
 import state from '../../state/State';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 
 export class Main extends Page {
-  private sortSelector: SortSelector;
   private filterSidebar: FilterSidebar;
 
   constructor(path?: string) {
@@ -14,7 +12,6 @@ export class Main extends Page {
       state.filter.filterQuery = path ?? '';
     }
     this.filterSidebar = new FilterSidebar('aside', 'shop__filters');
-    this.sortSelector = new SortSelector('div', 'filter__sort', ['price', 'rating', 'stock']);
   }
 
   render(): HTMLElement {
