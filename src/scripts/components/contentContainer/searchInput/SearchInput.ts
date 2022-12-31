@@ -6,6 +6,15 @@ import './searchInput.scss';
 
 export class SearchInput extends Component {
   private input: HTMLInputElement | null;
+  get value() {
+    return this.input?.value ?? '';
+  }
+  set value(value: string) {
+    if (this.input) {
+      this.input.value = value;
+    }
+  }
+
   constructor(tagName: string, className: string) {
     super(tagName, className);
     this.input = null;
@@ -14,7 +23,7 @@ export class SearchInput extends Component {
   render(): HTMLElement {
     this.input = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
       className: 'serch__input form-control',
-      type: 'text',
+      type: 'search',
       placeholder: 'Search...',
       autocomplete: 'off',
       ariaLabel: 'Small',
@@ -35,16 +44,16 @@ export class SearchInput extends Component {
     const targetElement = e.target;
     if (targetElement instanceof HTMLInputElement) {
       if (targetElement.value) {
-        state.setSearchParams(FilterTypeEnum.Search, targetElement.value);
+        state.filter?.setSearchParams(FilterTypeEnum.Search, targetElement.value);
       } else {
-        state.deleteAllSearchParamsByName(FilterTypeEnum.Search);
+        state.filter?.deleteAllSearchParamsByName(FilterTypeEnum.Search);
       }
     }
   }
 
   private updateProperties() {
     if (this.input) {
-      const value = state.filterParams.get(FilterTypeEnum.Search);
+      const value = state.filter?.filterParams.get(FilterTypeEnum.Search);
       this.input.value = value ?? '';
     }
   }

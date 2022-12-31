@@ -30,6 +30,15 @@ export class SortSelector extends Component {
       className: 'sort__select form-select',
     });
 
+    const optiontitle = ElementGenerator.createCustomElement<HTMLOptionElement>('option', {
+      className: 'sort__item',
+      disabled: true,
+      value: 'title',
+      text: 'Sort options:',
+      selected: true,
+    });
+    this.select?.options.add(optiontitle);
+
     this.sortOptions.forEach((option) => {
       const optionElement = ElementGenerator.createCustomElement<HTMLOptionElement>('option', {
         className: 'sort__item',
@@ -54,7 +63,7 @@ export class SortSelector extends Component {
     if (targetElement instanceof HTMLSelectElement) {
       const option = targetElement.options[targetElement.selectedIndex];
       if (option.value) {
-        state.setSearchParams(FilterTypeEnum.Sort, option.value);
+        state.filter?.setSearchParams(FilterTypeEnum.Sort, option.value);
       }
     }
   }
@@ -63,7 +72,7 @@ export class SortSelector extends Component {
     if (!this.select) {
       return;
     }
-    const value = state.filterParams.get(FilterTypeEnum.Sort);
+    const value = state.filter?.filterParams.get(FilterTypeEnum.Sort);
     if (!value) {
       return;
     }
