@@ -64,7 +64,9 @@ export class Slider<T extends object> extends Component {
     });
     this.min = this.defaultMin;
     this.max = this.defaultMax;
-    this.updateSliderProperties(state.filteredProducts);
+    if (state.filter) {
+      this.updateSliderProperties(state.filter.filteredProducts);
+    }
     this.container.classList.add('slider__container');
     this.container.append(wrapper);
     this.init();
@@ -81,7 +83,7 @@ export class Slider<T extends object> extends Component {
 
   private sliderChangeEventHandler(values: (string | number)[], handleNumber: number) {
     const paramName = handleNumber === 0 ? `sl-${this.propertyName}-from` : `sl-${this.propertyName}-to`;
-    state.setSearchParams(paramName, Math.floor(Number(values[handleNumber])).toString());
+    state.filter?.setSearchParams(paramName, Math.floor(Number(values[handleNumber])).toString());
   }
 
   private sliderUpdateEventHandler(values: (string | number)[]) {
@@ -97,8 +99,8 @@ export class Slider<T extends object> extends Component {
   }
 
   private updateSliderProperties<T>(list: T[]): void {
-    const from = state.filterParams.get(`sl-${this.propertyName}-from`);
-    const to = state.filterParams.get(`sl-${this.propertyName}-to`);
+    const from = state.filter?.filterParams.get(`sl-${this.propertyName}-from`);
+    const to = state.filter?.filterParams.get(`sl-${this.propertyName}-to`);
 
     let min = from ?? this.getMin(list, this.propertyName);
     min = !Number.isFinite(Number(min)) ? this.min : min;

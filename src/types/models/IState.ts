@@ -1,15 +1,10 @@
 import { ICartProducts } from './ICartProduct';
+import { IFilterState } from './IFilterState';
 import { IProduct } from './IProduct';
 
 export interface IState {
   products: IProduct[];
-  filterQuery: string;
-  filteredProducts: IProduct[];
+  filter: IFilterState | null;
   cart: ICartProducts;
-  updateFilter(): void;
-  setSearchParams(name: string, value: string): void;
-  appendSearchParams(name: string, value: string): void;
-  deleteSearchParams(name: string, value: string): void;
-  deleteAllSearchParamsByName(name: string): void;
   load(): Promise<void>;
 }
