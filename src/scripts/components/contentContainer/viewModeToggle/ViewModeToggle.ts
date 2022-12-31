@@ -11,7 +11,7 @@ export class ViewModeToggle extends Component {
   render(): HTMLElement {
     this.elements.radioGrid = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
       className: 'display__radio btn-check',
-      name: 'display-grid',
+      name: 'display-option',
       id: 'display-grid',
       autocomplete: 'off',
       checked: true,
@@ -19,7 +19,7 @@ export class ViewModeToggle extends Component {
     const displayGrid = this.createDisplayOption(this.elements.radioGrid, 'display-option', 'bi bi-grid-3x3-gap');
     this.elements.radioList = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
       className: 'display__radio btn-check',
-      name: 'display-list',
+      name: 'display-option',
       id: 'display-list',
       autocomplete: 'off',
       checked: false,
