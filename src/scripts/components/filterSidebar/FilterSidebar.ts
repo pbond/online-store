@@ -8,6 +8,7 @@ import { FilterTypeEnum } from '../../../types/enums/FilterTypeEnum';
 import state from '../../state/State';
 import { Button } from '../../../scripts/components/button/Button';
 import './filterSidebar.scss';
+import eventBus from '../../helpers/EventBus';
 
 export class FilterSidebar extends Component {
   private brandsFilter: Filter<IProduct>;
@@ -54,6 +55,9 @@ export class FilterSidebar extends Component {
   }
 
   init(): FilterSidebar {
+    eventBus.on('toggleSidebarClass', (className: string): void => {
+      this.container.firstElementChild?.classList.toggle(className);
+    });
     return this;
   }
 
