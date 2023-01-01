@@ -5,6 +5,7 @@ import './contentHeader.scss';
 import { ViewModeToggle } from '../viewModeToggle/ViewModeToggle';
 import eventBus from '../../../helpers/EventBus';
 import { IProduct } from '../../../../types/models/IProduct';
+import state from '../../../state/State';
 
 export class ContentHeader extends Component {
   private sortSelector: SortSelector;
@@ -20,6 +21,9 @@ export class ContentHeader extends Component {
     this.elements.countSpan = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
       className: 'products__count',
     });
+    if (state.filter) {
+      this.update(state.filter?.filteredProducts);
+    }
     this.container.append(this.sortSelector.render());
     this.container.append(this.elements.countSpan);
     this.container.append(this.viewModeToggle.render());
