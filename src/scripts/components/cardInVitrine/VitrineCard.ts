@@ -144,7 +144,7 @@ export class VitrineCard extends Component {
       <div class="row g-0">
         <div class="col-sm-4">
           <a href="#/details?id=${product.id}" class="card__link">
-            <img src="${product.thumbnail}" class="card__image card-img-top" alt="${product.title}">
+            <img src="${product.thumbnail}" class="card-list__image card-img-top" alt="${product.title}">
           </a>
         </div>
         <div class="col-sm-8">
