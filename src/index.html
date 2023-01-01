@@ -1,79 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Online store</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Online store</title>
-</head>
+  <body class="body">
+    <main>
+      <div class="display-option">
+        <input
+          type="radio"
+          class="display__radio btn-check"
+          name="display-option"
+          id="display-grid"
+          autocomplete="off"
+          checked
+        />
+        <label class="btn btn-outline-secondary" for="display-grid">
+          <i class="bi bi-grid-3x3-gap"></i>
+        </label>
+      </div>
+      <div class="display-option">
+        <input
+          type="radio"
+          class="display__radio btn-check"
+          name="display-option"
+          id="display-list"
+          autocomplete="off"
+        />
+        <label class="btn btn-outline-secondary" for="display-list">
+          <i class="bi bi-list"></i>
+        </label>
+      </div>
 
-<body class="body">
-  <header>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
-        aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <a href="#/" class="navbar-brand">
-          <i class="bi bi-shop-window"></i>
-          Main page
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item mr-auto">
-              <a href="#/details" class="nav-link">
-                <i class="bi bi-archive"></i>
-                Details</a>
-            </li>
-            <li class="nav-item">
-              <a href="#/cart" class="nav-link">
-                <i class="bi bi-cart"></i>
-                Cart</a>
-            </li>
-            <li class="nav-item">
-              <a href="#/contacts" class="nav-link">
-                <i class="bi bi-diagram-3"></i>
-                Contacts</a>
-            </li>
-          </ul>
-        </div>
-    </nav>
-  </header>
-  <main>
-    <div class="display-option">
-      <input type="radio" class="display__radio btn-check" name="display-option" id="display-grid" autocomplete="off"
-        checked>
-      <label class="btn btn-outline-secondary" for="display-grid">
-        <i class="bi bi-grid-3x3-gap"></i>
-      </label>
-    </div>
-    <div class="display-option">
-      <input type="radio" class="display__radio btn-check" name="display-option" id="display-list" autocomplete="off">
-      <label class="btn btn-outline-secondary" for="display-list">
-        <i class="bi bi-list"></i>
-      </label>
-    </div>
-
-
-    <div id="application">
-    </div>
-
-  </main>
-  <footer>
-    <a href="https://rs.school" class="logo"></a>
-    <div class="info">
-      <a href="https://github.com/pbond" class="git-info">
-        GitHub
-      </a>
-      <span class="info__created-year">2022</span>
-      <p class="copyright">
-        Copyright <a href="https://newsapi.org">NewsAPI</a>
-      </p>
-    </div>
-  </footer>
-</body>
-
+      <div id="application"></div>
+    </main>
+    <footer>
+      <a href="https://rs.school" class="logo"></a>
+      <div class="info">
+        <a href="https://github.com/pbond" class="git-info"> GitHub </a>
+        <span class="info__created-year">2022</span>
+        <p class="copyright">Copyright <a href="https://newsapi.org">NewsAPI</a></p>
+      </div>
+    </footer>
+  </body>
 </html>
