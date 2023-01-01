@@ -9,6 +9,7 @@ import state from '../../state/State';
 import { Button } from '../../../scripts/components/button/Button';
 import './filterSidebar.scss';
 import eventBus from '../../helpers/EventBus';
+import router from '../../router/Router';
 
 export class FilterSidebar extends Component {
   private brandsFilter: Filter<IProduct>;
@@ -65,6 +66,7 @@ export class FilterSidebar extends Component {
     if (state.filter) {
       state.filter.filterQuery = '';
       this.search.value = '';
+      router.updateQuery('');
     }
   }
 
