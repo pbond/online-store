@@ -4,33 +4,3 @@
 
 //@import "scripts/components/cardInVitrine/cardInVitrine.scss";
 @import 'bootstrap/bootstrap.scss';
-
-.card {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0px 1px 2px rgb(58 58 68 / 24%), 0px 2px 4px rgb(90 91 106 / 24%);
-  transition: all 0.5s ease;
-  &:hover {
-    box-shadow: 0 15px 30px rgb(0 0 0 / 10%);
-    transform: translate3d(0px, -2px, 0px);
-  }
-}
-
-.card__image {
-  height: 230px;
-  object-fit: cover;
-}
-
-.card__info {
-  margin-bottom: 0.1rem;
-}
-
-.card__info-item {
-  margin-bottom: 0.1rem;
-}
-
-.card__btn {
-  margin-left: 0.5rem;
-}
