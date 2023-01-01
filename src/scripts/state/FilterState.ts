@@ -22,11 +22,18 @@ export class FilterState implements IFilterState {
   }
 
   get viewMode() {
+    const view = this.filterParams.get(FilterTypeEnum.ViewMode);
+    if (view) {
+      this._viewMode = view as ViewModeEnum;
+      return view as ViewModeEnum;
+    }
     return this._viewMode;
   }
 
   set viewMode(mode: ViewModeEnum) {
     this._viewMode = mode;
+    this.filterParams.set(FilterTypeEnum.ViewMode, mode);
+    router.updateQuery(this.filterQuery);
     eventBus.trigger('changeViewMode', mode);
   }
 
@@ -50,6 +57,7 @@ export class FilterState implements IFilterState {
       (n) =>
         n !== FilterTypeEnum.Search &&
         n !== FilterTypeEnum.Sort &&
+        n !== FilterTypeEnum.ViewMode &&
         !n.startsWith('sl-') &&
         !n.endsWith('-from') &&
         !n.endsWith('-to')
