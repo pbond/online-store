@@ -16,6 +16,7 @@ export class Main extends Page {
     }
     this.filterSidebar = new FilterSidebar('aside', 'shop__filters');
     this.contentContainer = new ContentContainer('section', 'shop__content');
+    this.filterSidebar.init();
   }
 
   render(): HTMLElement {
