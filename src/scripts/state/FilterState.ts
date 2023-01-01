@@ -4,11 +4,13 @@ import eventBus from '../helpers/EventBus';
 import { FilterTypeEnum } from '../../types/enums/FilterTypeEnum';
 import { SortTypeEnum } from '../../types/enums/SortTypeEnum';
 import { IFilterState } from '../../types/models/IFilterState';
+import { ViewModeEnum } from '../../types/enums/ViewModeEnum';
 
 export class FilterState implements IFilterState {
   private products: IProduct[];
   filteredProducts: IProduct[];
   filterParams: URLSearchParams;
+  private _viewMode: ViewModeEnum;
 
   get filterQuery() {
     return this.filterParams.toString();
@@ -20,10 +22,20 @@ export class FilterState implements IFilterState {
     router.updateQuery(this.filterQuery);
   }
 
+  get viewMode() {
+    return this._viewMode;
+  }
+
+  set viewMode(mode: ViewModeEnum) {
+    this._viewMode = mode;
+    eventBus.trigger('changeViewMode', mode);
+  }
+
   constructor(products: IProduct[]) {
     this.products = products;
     this.filteredProducts = [];
     this.filterParams = new URLSearchParams();
+    this._viewMode = ViewModeEnum.Grid;
   }
 
   updateFilter(): void {

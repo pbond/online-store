@@ -1,7 +1,7 @@
 import { Component } from '../../../../types/templates/Component';
 import { ElementGenerator } from '../../../helpers/ElementGenerator';
 import { SortSelector } from '../../contentContainer/sortSelector/SortSelector';
-import './searchInput.scss';
+import './contentHeader.scss';
 import { ViewModeToggle } from '../viewModeToggle/ViewModeToggle';
 import eventBus from '../../../helpers/EventBus';
 import { IProduct } from '../../../../types/models/IProduct';
@@ -23,6 +23,7 @@ export class ContentHeader extends Component {
     this.container.append(this.sortSelector.render());
     this.container.append(this.elements.countSpan);
     this.container.append(this.viewModeToggle.render());
+    this.container.classList.add('content-header-container');
     this.init();
     return this.container;
   }

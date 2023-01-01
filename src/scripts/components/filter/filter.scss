@@ -1,5 +1,5 @@
 .filter__container {
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 1px 2px rgb(58 58 68 / 24%), 0px 2px 4px rgb(90 91 106 / 24%);
   border-radius: 0.25em;
   margin: 0.1em;
 }
@@ -49,4 +49,12 @@
 .filter__checkbox {
   margin-right: 5px;
   cursor: pointer;
+}
+
+.filter__title {
+  margin-left: 0.5rem;
+}
+
+.filter__name {
+  white-space: nowrap;
 }
