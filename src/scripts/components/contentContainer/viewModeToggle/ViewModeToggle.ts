@@ -1,7 +1,8 @@
 import { Component } from '../../../../types/templates/Component';
 import { ElementGenerator } from '../../../helpers/ElementGenerator';
-import eventBus from '../../../helpers/EventBus';
+import { ViewModeEnum } from '../../../../types/enums/ViewModeEnum';
 import './viewModeToggle.scss';
+import state from '../../../state/State';
 
 export class ViewModeToggle extends Component {
   constructor(tagName: string, className: string) {
@@ -10,17 +11,19 @@ export class ViewModeToggle extends Component {
 
   render(): HTMLElement {
     this.elements.radioGrid = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
+      type: 'radio',
       className: 'display__radio btn-check',
       name: 'display-option',
-      id: 'display-grid',
+      id: ViewModeEnum.Grid,
       autocomplete: 'off',
       checked: true,
     });
     const displayGrid = this.createDisplayOption(this.elements.radioGrid, 'display-option', 'bi bi-grid-3x3-gap');
     this.elements.radioList = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
+      type: 'radio',
       className: 'display__radio btn-check',
       name: 'display-option',
-      id: 'display-list',
+      id: ViewModeEnum.List,
       autocomplete: 'off',
       checked: false,
     });
@@ -39,8 +42,8 @@ export class ViewModeToggle extends Component {
 
   private radioChangeHandler(e: Event): void {
     const target = e.target;
-    if (target instanceof HTMLInputElement) {
-      eventBus.trigger('changeViewMode', target.id);
+    if (target instanceof HTMLInputElement && state.filter) {
+      state.filter.viewMode = target.id as ViewModeEnum;
     }
   }
 
@@ -50,7 +53,7 @@ export class ViewModeToggle extends Component {
     });
     const label = ElementGenerator.createCustomElement<HTMLLabelElement>('label', {
       className: 'btn btn-outline-secondary',
-      for: inputElement.id,
+      htmlFor: inputElement.id,
     });
     const icon = ElementGenerator.createCustomElement<HTMLElement>('i', {
       className: iconClass,
