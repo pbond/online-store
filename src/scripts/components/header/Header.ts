@@ -3,7 +3,6 @@ import { ElementGenerator } from '../../helpers/ElementGenerator';
 import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
 import './header.scss';
-
 export class Header extends Component {
   constructor() {
     super('header', '');
@@ -15,6 +14,10 @@ export class Header extends Component {
 
     eventBus.on('cartUpdated', this.updateCart);
     eventBus.on('setFilterButtonVisibility', this.toggleFilterButton);
+
+    this.elements.filterButton.addEventListener('pointerdown', () => {
+      eventBus.trigger('toggleSidebarClass', 'show');
+    });
     return this;
   }
 
@@ -61,7 +64,7 @@ export class Header extends Component {
   private createBrandLink(): HTMLAnchorElement {
     const link = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
       className: 'navbar-brand',
-      href: '"/#/main',
+      href: '/#/main',
       innerText: 'Online store',
     });
     link.insertAdjacentHTML('afterbegin', '<i class="bi bi-shop-window px-2"></i>');
@@ -70,7 +73,7 @@ export class Header extends Component {
 
   private createFilterButton(): HTMLButtonElement {
     const button = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-      className: 'navbar-toggler me-auto border-0 navbar-right',
+      className: 'navbar-toggler me-auto border-0',
       type: 'button',
       dataBsToggle: 'collapse',
       dataBsTarget: '#sidebarMenu',
@@ -79,13 +82,7 @@ export class Header extends Component {
       ariaLabel: 'Toggle navigation',
     });
 
-    button.insertAdjacentHTML(
-      'afterbegin',
-      `<a href="#/" class="navbar-brand">
-        <i class="bi bi-menu-app"></i>
-        Filter
-       </a>`
-    );
+    button.insertAdjacentHTML('afterbegin', '<i class="bi bi-menu-app"></i>Filter');
     return button;
   }
 

@@ -4,3 +4,7 @@
     width: 1.5em;
     text-align: center;
 }
+
+button.navbar-toggler:focus {
+    box-shadow: none;
+}

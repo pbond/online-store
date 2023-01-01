@@ -12,6 +12,7 @@ export class Main extends Page {
       state.filter.filterQuery = path ?? '';
     }
     this.filterSidebar = new FilterSidebar('aside', 'shop__filters');
+    this.filterSidebar.init();
   }
 
   render(): HTMLElement {

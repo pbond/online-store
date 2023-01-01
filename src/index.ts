@@ -21,6 +21,8 @@ class Application {
   render() {
     const header = new Header();
     document.body.insertAdjacentElement('afterbegin', header.render());
+
+    header.init();
   }
 }
 

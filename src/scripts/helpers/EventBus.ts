@@ -6,7 +6,8 @@ type EnentBusType =
   | 'addProductToCart'
   | 'removeProductFromCart'
   | 'changeViewMode'
-  | 'setFilterButtonVisibility';
+  | 'setFilterButtonVisibility'
+  | 'toggleSidebarClass';
 
 class EventBus {
   private readonly events: EventsDictionary;
