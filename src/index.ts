@@ -4,6 +4,7 @@ import { IRouter } from './types/router/IRouter';
 import router from './scripts/router/Router';
 import state from './scripts/state/State';
 import { Header } from './scripts/components/header/Header';
+import { Footer } from './scripts/components/footer/Footer';
 
 class Application {
   private router: IRouter;
@@ -21,8 +22,10 @@ class Application {
   render() {
     const header = new Header();
     document.body.insertAdjacentElement('afterbegin', header.render());
-
     header.init();
+
+    const footer = new Footer();
+    document.body.insertAdjacentElement('beforeend', footer.render());
   }
 }
 

@@ -1,0 +1,30 @@
+footer .logo:before {
+  content: ' ';
+  background-image: url("../../../assets/rs_school.svg");
+  filter: invert(100%);
+  display: block;
+  background-repeat: no-repeat;
+  height: 4vh;
+  width: 28vw;
+  min-width: 120px;
+}
+
+@media (min-width: 576px) {
+  footer {
+    height: 6vh;
+    min-height: 25px;
+  }
+
+  footer .logo:before {
+    height: 4vh;
+    width: 24vw;
+  }
+}
+
+footer .logo {
+  padding-left: 0.5rem;
+}
+
+footer .info {
+  padding-right: 0.5rem;
+}
