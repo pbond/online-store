@@ -1,10 +1,10 @@
 import { Webrequest } from '../../src/scripts/helpers/WebRequest';
-import { ProductResponse } from '../../src/types/models/ProductResponse';
-import { Product } from '../../src/types/models/Product';
+import { IProductResponse } from '../../src/types/models/IProductResponse';
+import { IProduct } from '../../src/types/models/IProduct';
 import fetch from 'node-fetch';
 
 describe('Webrequest tests', () => {
-  const product: Product = {
+  const product: IProduct = {
     id: 3,
     title: 'Samsung Universe 9',
     description: "Samsung's new variant which goes beyond Galaxy to the Universe",
@@ -17,7 +17,7 @@ describe('Webrequest tests', () => {
     thumbnail: 'https://i.dummyjson.com/data/products/3/thumbnail.jpg',
     images: ['https://i.dummyjson.com/data/products/3/1.jpg'],
   };
-  const data: ProductResponse = {
+  const data: IProductResponse = {
     products: [product],
     limit: 0,
     skip: 0,
@@ -32,14 +32,14 @@ describe('Webrequest tests', () => {
         json: () => Promise.resolve(data),
       })
     ) as jest.Mock;
-    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
+    const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
     expect(result).toHaveProperty('products');
     expect(result.products[0].description).toStrictEqual(data.products[0].description);
   });
 
   it('should get products', async () => {
     global.fetch = fetch as never;
-    const result = await Webrequest.get<ProductResponse>('https://dummyjson.com/products?limit=100');
+    const result = await Webrequest.get<IProductResponse>('https://dummyjson.com/products?limit=100');
     expect(result).toHaveProperty('products');
   }, 20000);
 });
