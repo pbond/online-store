@@ -10,7 +10,6 @@ export class FilterState implements IFilterState {
   private products: IProduct[];
   filteredProducts: IProduct[];
   filterParams: URLSearchParams;
-  private _viewMode: ViewModeEnum;
 
   get filterQuery() {
     return this.filterParams.toString();
@@ -24,14 +23,12 @@ export class FilterState implements IFilterState {
   get viewMode() {
     const view = this.filterParams.get(FilterTypeEnum.ViewMode);
     if (view) {
-      this._viewMode = view as ViewModeEnum;
       return view as ViewModeEnum;
     }
-    return this._viewMode;
+    return ViewModeEnum.Grid;
   }
 
   set viewMode(mode: ViewModeEnum) {
-    this._viewMode = mode;
     this.filterParams.set(FilterTypeEnum.ViewMode, mode);
     router.updateQuery(this.filterQuery);
     eventBus.trigger('changeViewMode', mode);
@@ -41,7 +38,6 @@ export class FilterState implements IFilterState {
     this.products = products;
     this.filteredProducts = [];
     this.filterParams = new URLSearchParams();
-    this._viewMode = ViewModeEnum.Grid;
   }
 
   updateFilter(): void {
