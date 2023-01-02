@@ -5,4 +5,5 @@ export enum FilterTypeEnum {
   Category = 'category',
   Price = 'price',
   Stock = 'stock',
+  ViewMode = 'view-mode',
 }

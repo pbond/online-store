@@ -16,7 +16,7 @@ export class ViewModeToggle extends Component {
       name: 'display-option',
       id: ViewModeEnum.Grid,
       autocomplete: 'off',
-      checked: true,
+      checked: state.filter?.viewMode === ViewModeEnum.Grid,
     });
     const displayGrid = this.createDisplayOption(this.elements.radioGrid, 'display-option', 'bi bi-grid-3x3-gap');
     this.elements.radioList = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
@@ -25,7 +25,7 @@ export class ViewModeToggle extends Component {
       name: 'display-option',
       id: ViewModeEnum.List,
       autocomplete: 'off',
-      checked: false,
+      checked: state.filter?.viewMode === ViewModeEnum.List,
     });
     const displayList = this.createDisplayOption(this.elements.radioList, 'display-option', 'bi bi-list');
     this.container.append(displayGrid);

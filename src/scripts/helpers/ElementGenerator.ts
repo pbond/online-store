@@ -1,6 +1,6 @@
 export class ElementGenerator {
-  public static createElementByInnerHtml<T extends Element>(innerHTML: string, className?: string): T {
-    const container = document.createElement('template');
+  public static createElementByInnerHtml<T extends HTMLElement>(innerHTML: string, className?: string): T {
+    const container = document.createElement('div');
     container.innerHTML = innerHTML;
     if (!container.firstElementChild) {
       throw new Error(`FirstElementChild didn't match any elements.`);
