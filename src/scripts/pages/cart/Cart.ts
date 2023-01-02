@@ -9,7 +9,7 @@ export class Cart extends Page {
   }
 
   render(): HTMLElement {
-    state.cart.forEach((cartItem) => {
+    state.cart.products.forEach((cartItem) => {
       const card = new CartCard(cartItem.product, cartItem.count);
       this.container.append(card.render());
     });

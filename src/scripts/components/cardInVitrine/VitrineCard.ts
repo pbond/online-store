@@ -169,7 +169,7 @@ export class VitrineCard extends Component {
   }
 
   private getCartButtonElement(product: IProduct): HTMLElement {
-    const index = state.cart.findIndex((cartProd) => cartProd.product.id === product.id);
+    const index = state.cart.products.findIndex((cartProd) => cartProd.product.id === product.id);
     let button = null;
     if (index >= 0) {
       button = new Button('card__btn btn btn-danger incart', 'Drop from cart', this.addToCartHandler.bind(this));
