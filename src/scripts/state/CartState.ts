@@ -1,24 +1,25 @@
 import { ICartProducts } from '../../types/models/ICartProduct';
 import { IProduct } from '../../types/models/IProduct';
 import eventBus from '../helpers/EventBus';
+import { ICartState } from '../../types/models/ICartState';
 
-class CartState {
-  products: ICartProducts;
+class CartState implements ICartState {
+  products: ICartProducts = [];
 
   constructor() {
-    const cart = localStorage.getItem('cartProducts');
-    if (cart !== null) {
-      this.products = JSON.parse(cart);
-    } else {
-      this.products = [];
+    const cartProducts = localStorage.getItem('cartProducts');
+    if (cartProducts !== null) {
+      this.products = JSON.parse(cartProducts);
     }
   }
 
   init() {
     this.addToCart = this.addToCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
+    this.saveCart = this.saveCart.bind(this);
     eventBus.on('addProductToCart', this.addToCart);
     eventBus.on('removeProductFromCart', this.removeFromCart);
+    eventBus.on('cartUpdated', this.saveCart);
   }
 
   addToCart(product: IProduct): void {
@@ -46,9 +47,13 @@ class CartState {
     }
     eventBus.trigger('cartUpdated', this.products);
   }
+
+  saveCart(): void {
+    localStorage.setItem('cartProducts', JSON.stringify(this.products));
+  }
 }
 
-const state = new CartState();
-state.init();
+const cartState = new CartState();
+cartState.init();
 
-export default state;
+export default cartState;

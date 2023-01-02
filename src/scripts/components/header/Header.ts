@@ -25,7 +25,7 @@ export class Header extends Component {
       });
       this.elements.cartAnchor.append(this.elements.cartBadge);
     }
-    this.elements.cartBadge.innerText = state.cart.length + '';
+    this.elements.cartBadge.innerText = state.cart.products.length + '';
   }
 
   toggleFilterButton(isVisible: boolean): void {
