@@ -15,9 +15,6 @@ export class Header extends Component {
     eventBus.on('cartUpdated', this.updateCart);
     eventBus.on('setFilterButtonVisibility', this.toggleFilterButton);
 
-    this.elements.filterButton.addEventListener('pointerdown', () => {
-      eventBus.trigger('toggleSidebarClass', 'show');
-    });
     return this;
   }
 
@@ -75,12 +72,12 @@ export class Header extends Component {
     const button = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
       className: 'navbar-toggler me-auto border-0',
       type: 'button',
-      dataBsToggle: 'collapse',
-      dataBsTarget: '#sidebarMenu',
-      ariaControls: 'sidebarMenu',
       ariaExpanded: 'false',
       ariaLabel: 'Toggle navigation',
     });
+    button.setAttribute('data-bs-toggle', 'collapse');
+    button.setAttribute('data-bs-target', '#sidebarMenu');
+    button.setAttribute('aria-controls', 'sidebarMenu');
 
     button.insertAdjacentHTML('afterbegin', '<i class="bi bi-menu-app"></i>Filter');
     return button;
@@ -148,7 +145,7 @@ export class Header extends Component {
     });
 
     this.elements.cartAnchor = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
-      className: 'nav-link position-relative mx-3',
+      className: 'nav-link position-relative',
       href: '/#/cart',
       innerHTML: '<i class="bi bi-cart pe-2"></i>Cart',
     });
