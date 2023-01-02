@@ -9,6 +9,7 @@ import state from '../../state/State';
 import { Button } from '../../../scripts/components/button/Button';
 import './filterSidebar.scss';
 import eventBus from '../../helpers/EventBus';
+import router from '../../router/Router';
 
 export class FilterSidebar extends Component {
   private brandsFilter: Filter<IProduct>;
@@ -21,8 +22,12 @@ export class FilterSidebar extends Component {
 
   constructor(tagName: string, className: string) {
     super(tagName, className);
-    this.clearButton = new Button('filter__reset btn btn-primary', 'Reset Filters', this.clearEventHandler.bind(this));
-    this.copyButton = new Button('filter__copy btn btn-primary', 'Copy Link', this.copyEventHandler.bind(this));
+    this.clearButton = new Button(
+      'filter__reset btn btn-outline-primary',
+      'Reset Filters',
+      this.clearEventHandler.bind(this)
+    );
+    this.copyButton = new Button('filter__copy btn btn-outline-primary', 'Copy Link', this.copyEventHandler.bind(this));
     this.search = new SearchInput('div', 'filter__search');
     this.brandsFilter = new Filter<IProduct>('div', 'filter__brand', FilterTypeEnum.Brand, state.products);
     this.categorysFilter = new Filter<IProduct>('div', 'filter__category', FilterTypeEnum.Category, state.products);
@@ -65,6 +70,7 @@ export class FilterSidebar extends Component {
     if (state.filter) {
       state.filter.filterQuery = '';
       this.search.value = '';
+      router.updateQuery('');
     }
   }
 

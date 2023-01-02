@@ -10,8 +10,8 @@ describe('EventBus tests', () => {
       data = nums.map((n) => n * n);
     };
 
-    eventBus.on('multiply', multiplier);
-    eventBus.trigger<Array<number>>('multiply', [1, 2, 3]);
+    eventBus.on('toggleSidebarClass', multiplier);
+    eventBus.trigger<Array<number>>('toggleSidebarClass', [1, 2, 3]);
     expect(data).toStrictEqual([1, 4, 9]);
   });
 
@@ -21,12 +21,12 @@ describe('EventBus tests', () => {
       data = nums.map((n) => n * n);
     };
 
-    eventBus.on('multiply', multiplier);
-    eventBus.trigger('multiply', [1, 2, 3]);
+    eventBus.on('toggleSidebarClass', multiplier);
+    eventBus.trigger('toggleSidebarClass', [1, 2, 3]);
     expect(data).toStrictEqual([1, 4, 9]);
 
-    eventBus.off('multiply', multiplier);
-    eventBus.trigger('multiply', [2, 3, 4]);
+    eventBus.off('toggleSidebarClass', multiplier);
+    eventBus.trigger('toggleSidebarClass', [2, 3, 4]);
     expect(data).toStrictEqual([1, 4, 9]); //value from previous call
   });
 });

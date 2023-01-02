@@ -10,7 +10,6 @@ export class FilterState implements IFilterState {
   private products: IProduct[];
   filteredProducts: IProduct[];
   filterParams: URLSearchParams;
-  private _viewMode: ViewModeEnum;
 
   get filterQuery() {
     return this.filterParams.toString();
@@ -19,15 +18,19 @@ export class FilterState implements IFilterState {
   set filterQuery(query: string) {
     this.filterParams = new URLSearchParams(query);
     this.updateFilter();
-    router.updateQuery(this.filterQuery);
   }
 
   get viewMode() {
-    return this._viewMode;
+    const view = this.filterParams.get(FilterTypeEnum.ViewMode);
+    if (view) {
+      return view as ViewModeEnum;
+    }
+    return ViewModeEnum.Grid;
   }
 
   set viewMode(mode: ViewModeEnum) {
-    this._viewMode = mode;
+    this.filterParams.set(FilterTypeEnum.ViewMode, mode);
+    router.updateQuery(this.filterQuery);
     eventBus.trigger('changeViewMode', mode);
   }
 
@@ -35,7 +38,6 @@ export class FilterState implements IFilterState {
     this.products = products;
     this.filteredProducts = [];
     this.filterParams = new URLSearchParams();
-    this._viewMode = ViewModeEnum.Grid;
   }
 
   updateFilter(): void {
@@ -51,6 +53,7 @@ export class FilterState implements IFilterState {
       (n) =>
         n !== FilterTypeEnum.Search &&
         n !== FilterTypeEnum.Sort &&
+        n !== FilterTypeEnum.ViewMode &&
         !n.startsWith('sl-') &&
         !n.endsWith('-from') &&
         !n.endsWith('-to')
