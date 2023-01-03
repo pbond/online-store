@@ -1,4 +1,4 @@
-.card {
+.card-vitrine {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -14,13 +14,19 @@
   height: 100%;
 }
 
+.card__img-cont {
+  padding: 0.2rem;
+}
+
 .card__image {
   height: 235px;
+  border-radius: 0.2rem;
   object-fit: cover;
 }
 
 .card-list__image {
   height: 250px;
+  border-radius: 0.2rem;
   object-fit: cover;
 }
 
