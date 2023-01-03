@@ -5,6 +5,7 @@ import { IProduct } from '../../../types/models/IProduct';
 import state from '../../state/State';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 import { BreadCrumbs } from '../../../scripts/components/breadCrumbs/BreadCrumbs';
+import { ViewModeEnum } from '../../../types/enums/ViewModeEnum';
 
 export class Details extends Page {
   private cardDetails: CardDetails | null;
@@ -21,6 +22,7 @@ export class Details extends Page {
       this.breadcrumb = new BreadCrumbs<IProduct>('nav', 'bread-crumbs', this.product, ['category', 'brand', 'title'], {
         name: 'Store',
         link: '#/main',
+        viewMode: state.filter?.viewMode || ViewModeEnum.Grid,
       });
     }
   }

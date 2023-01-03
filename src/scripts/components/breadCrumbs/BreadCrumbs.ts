@@ -1,17 +1,18 @@
 import './breadCrumbs.scss';
 import { Component } from '../../../types/templates/Component';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
+import { ViewModeEnum } from '../../../types/enums/ViewModeEnum';
 
 export class BreadCrumbs<T extends object> extends Component {
   private product: T;
   private crumbsProperties: string[];
-  private homeLink: { name: string; link: string };
+  private homeLink: { name: string; link: string; viewMode: ViewModeEnum };
   constructor(
     tagName: string,
     className: string,
     product: T,
     crumbsProperties: string[],
-    homeLink: { name: string; link: string }
+    homeLink: { name: string; link: string; viewMode: ViewModeEnum }
   ) {
     super(tagName, className);
     this.product = product;
@@ -23,12 +24,11 @@ export class BreadCrumbs<T extends object> extends Component {
     const breadCrumbs = ElementGenerator.createCustomElement<HTMLOListElement>('ol', {
       className: 'breadcrumb',
     });
-    let link = `${this.homeLink.link}`;
+    let link = `${this.homeLink.link}?view-mode=${this.homeLink.viewMode}&`;
 
     const firstItem = ElementGenerator.createElementByInnerHtml<HTMLLIElement>(`
     <li class="breadcrumb-item"><a href="${link}">${this.homeLink.name.toUpperCase()}</a></li>`);
     breadCrumbs.append(firstItem);
-    link = link + '?';
 
     this.crumbsProperties.slice(0, -1).forEach((crumb) => {
       const crumbValue = String(Object.getOwnPropertyDescriptor(this.product, crumb)?.value);
