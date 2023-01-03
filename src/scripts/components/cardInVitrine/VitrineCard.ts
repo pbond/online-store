@@ -64,7 +64,7 @@ export class VitrineCard extends Component {
   private renderCardGrid(): HTMLElement {
     this.elements.buttonElement = this.getCartButtonElement();
     const cardPriceCont = ElementGenerator.createElementByInnerHtml(`
-    <div class="card__price d-flex justify-content-end align-items-center">
+    <div class="card__price-vitrine d-flex justify-content-end align-items-center">
       <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
     </div>`);
     const card = ElementGenerator.createElementByInnerHtml(`
@@ -99,7 +99,7 @@ export class VitrineCard extends Component {
   private renderCardList(): HTMLElement {
     this.elements.buttonElement = this.getCartButtonElement();
     const cardPriceCont = ElementGenerator.createElementByInnerHtml(`
-    <div class="card__price d-flex justify-content-end align-items-center">
+    <div class="card__price-vitrine d-flex justify-content-end align-items-center">
       <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
     </div>`);
     const card = ElementGenerator.createElementByInnerHtml(`
