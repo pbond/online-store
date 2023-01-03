@@ -56,9 +56,14 @@ export class CardDetails extends Component {
 
   private renderCardList(): HTMLElement {
     this.elements.buttonElement = this.getCartButtonElement();
+    this.elements.buttonBuyNowElement = this.getBuyNowButtonElement();
     const cardPriceCont = ElementGenerator.createElementByInnerHtml<HTMLDivElement>(`
-    <div class="card__price d-flex justify-content-end align-items-center">
+    <div class="card__price-cont d-flex justify-content-end align-items-center">
       <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
+    </div>`);
+    const cardPriceFlex = ElementGenerator.createElementByInnerHtml<HTMLDivElement>(`
+    <div class="card__price">
+      
     </div>`);
     const card = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'card details__card-cont',
@@ -100,7 +105,9 @@ export class CardDetails extends Component {
     row.append(cardinfo);
     card.append(row);
     cardPriceCont.append(this.elements.buttonElement);
-    card.append(cardPriceCont);
+    cardPriceFlex.append(this.elements.buttonBuyNowElement);
+    cardPriceFlex.append(cardPriceCont);
+    card.append(cardPriceFlex);
     return card;
   }
 
@@ -178,6 +185,21 @@ export class CardDetails extends Component {
     }
     const buttonElement = button.render();
     return buttonElement;
+  }
+
+  private getBuyNowButtonElement(): HTMLElement {
+    const button = new Button('card__btn-now btn btn-outline-danger', 'Buy Now', this.buyNowHandler.bind(this));
+    return button.render();
+  }
+
+  private buyNowHandler(event: MouseEvent): void {
+    const target = event.target;
+    if (target instanceof HTMLButtonElement) {
+      if (!this.isInCart) {
+        eventBus.trigger('addProductToCart', this.product);
+      }
+      window.location.href = '#/cart';
+    }
   }
 
   private changeCartStateHandler(event: MouseEvent): void {
