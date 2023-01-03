@@ -111,53 +111,17 @@ export class CardDetails extends Component {
     return card;
   }
 
-  private renderCardList2(): HTMLElement {
-    this.elements.buttonElement = this.getCartButtonElement();
-    const cardPriceCont = ElementGenerator.createElementByInnerHtml(`
-    <div class="card__price d-flex justify-content-end align-items-center">
-      <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
-    </div>`);
-    const card = ElementGenerator.createElementByInnerHtml(`
-    <div class="card details__card-cont">
-      <div class="row g-0">
-        <div class="col-sm-4 card__img-cont">
-          <a href="#/details?id=${this.product.id}" class="card__link">
-            <img src="${this.product.thumbnail}" class="card-list__image card-img-top" alt="${this.product.title}">
-          </a>
-        </div>
-        <div class="col-sm-8">
-          <div class="card-body">
-            <h5 class="card-title">${this.product.title}</h5>
-            <p class="card__description card-text">${this.product.description}</p>
-            <div class="card__info-container">
-              <div class="card__info">
-                <p class="card__info-item card-text"><small class="text-muted">Catygory: ${this.product.category}</small></p>
-                <p class="card__info-item card-text"><small class="text-muted">Brand: ${this.product.brand}</small></p>
-                <p class="card__info-item card-text"><small class="text-muted">Stock: ${this.product.stock}</small></p>
-                <p class="card__info-item card-text"><small class="text-muted">Rating: ${this.product.rating}</small></p>
-                <p class="card__info-item card-text"><small class="text-muted">Discount: ${this.product.discountPercentage}%</small></p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`);
-    cardPriceCont.append(this.elements.buttonElement);
-    card.append(cardPriceCont);
-    return card;
-  }
-
   private renderCardImages(): HTMLElement {
     const card = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'details__images',
     });
     this.product.images.forEach(async (img) => {
-      const image = ElementGenerator.createCustomElement<HTMLImageElement>('img', {
-        className: 'card-list__image_small',
-        src: img,
-      });
       const fileImg = await fetch(img).then((r) => r.blob());
       if (!this.imageSizeList.some((size) => size === fileImg.size)) {
+        const image = ElementGenerator.createCustomElement<HTMLImageElement>('img', {
+          className: 'card-list__image_small',
+          src: img,
+        });
         this.imageSizeList.push(fileImg.size);
         image.addEventListener('click', this.imageClickHandler.bind(this));
         card.append(image);
