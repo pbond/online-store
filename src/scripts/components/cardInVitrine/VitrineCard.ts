@@ -64,13 +64,13 @@ export class VitrineCard extends Component {
   private renderCardGrid(): HTMLElement {
     this.elements.buttonElement = this.getCartButtonElement();
     const cardPriceCont = ElementGenerator.createElementByInnerHtml(`
-    <div class="card__price d-flex justify-content-end align-items-center">
+    <div class="card__price-vitrine d-flex justify-content-end align-items-center">
       <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
     </div>`);
     const card = ElementGenerator.createElementByInnerHtml(`
-    <div class="card card-grid mb-3">
+    <div class="card card-vitrine card-grid mb-3">
       <div class="row flex-column g-0">
-        <div class="col">
+        <div class="col card__img-cont">
           <a href="#/details?id=${this.product.id}" class="card__link">
             <img src="${this.product.thumbnail}" class="card__image card-img-top" alt="${this.product.title}">
           </a>
@@ -99,13 +99,13 @@ export class VitrineCard extends Component {
   private renderCardList(): HTMLElement {
     this.elements.buttonElement = this.getCartButtonElement();
     const cardPriceCont = ElementGenerator.createElementByInnerHtml(`
-    <div class="card__price d-flex justify-content-end align-items-center">
+    <div class="card__price-vitrine d-flex justify-content-end align-items-center">
       <span class="card__price-amount card-text"><b>$${this.product.price}</b></span>
     </div>`);
     const card = ElementGenerator.createElementByInnerHtml(`
-    <div class="card">
+    <div class="card card-vitrine">
       <div class="row g-0">
-        <div class="col-sm-4">
+        <div class="col-sm-4 card__img-cont">
           <a href="#/details?id=${this.product.id}" class="card__link">
             <img src="${this.product.thumbnail}" class="card-list__image card-img-top" alt="${this.product.title}">
           </a>
