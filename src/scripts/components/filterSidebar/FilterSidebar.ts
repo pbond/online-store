@@ -36,7 +36,7 @@ export class FilterSidebar extends Component {
 
   render(): HTMLElement {
     const navElement = ElementGenerator.createCustomElement<HTMLElement>('nav', {
-      className: 'filter__nav collapse d-lg-block sidebar collapse bg-white',
+      className: 'filter__nav collapse d-lg-block sidebar collapse',
       id: 'sidebarMenu',
     });
     const navcontainer = ElementGenerator.createCustomElement<HTMLElement>('div', {

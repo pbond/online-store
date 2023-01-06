@@ -1,7 +1,6 @@
 import { Page } from '../../../types/templates/Page';
 import { FilterSidebar } from '../../../scripts/components/filterSidebar/FilterSidebar';
 import state from '../../state/State';
-//import { ElementGenerator } from '../../helpers/ElementGenerator';
 import { ContentContainer } from '../../../scripts/components/contentContainer/ContentContainer';
 import './main.scss';
 

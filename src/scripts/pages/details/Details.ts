@@ -28,6 +28,11 @@ export class Details extends Page {
   }
 
   render(): HTMLElement {
+    const head = ElementGenerator.createCustomElement<HTMLElement>('h2', {
+      className: 'my-2 my-sm-3 my-md-4 offset-lg-0',
+      textContent: 'Product details',
+    });
+    this.container.append(head);
     if (this.breadcrumb) {
       this.container.append(this.breadcrumb.render());
     }
