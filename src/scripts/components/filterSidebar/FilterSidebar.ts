@@ -81,4 +81,15 @@ export class FilterSidebar extends Component {
       }, 500);
     }
   }
+
+  destroy(): void {
+    this.clearButton.destroy();
+    this.copyButton.destroy();
+    this.search.destroy();
+    this.brandsFilter.destroy();
+    this.categorysFilter.destroy();
+    this.priceSlider.destroy();
+    this.stockSlider.destroy();
+    super.destroy();
+  }
 }

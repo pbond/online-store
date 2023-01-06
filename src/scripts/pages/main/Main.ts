@@ -24,4 +24,10 @@ export class Main extends Page {
     this.container.classList.add('shop');
     return this.container;
   }
+
+  destroy(): void {
+    this.filterSidebar.destroy();
+    this.contentContainer.destroy();
+    super.destroy();
+  }
 }

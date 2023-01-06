@@ -41,6 +41,7 @@ export class Details extends Page {
       this.container.append(notFoundElement);
     }
     this.container.classList.add('details');
+    this.container.classList.add('container');
     return this.container;
   }
 
@@ -58,5 +59,11 @@ export class Details extends Page {
       return null;
     }
     return product;
+  }
+
+  destroy(): void {
+    this.cardDetails?.destroy();
+    this.breadcrumb?.destroy();
+    super.destroy();
   }
 }

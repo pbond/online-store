@@ -1,6 +1,5 @@
 import { Component } from '../../../types/templates/Component';
 import './contentContainer.scss';
-//import { ViewModeToggle } from './viewModeToggle/ViewModeToggle';
 import { ContentHeader } from './contentHeader/ContentHeader';
 import { Vitrine } from '../vitrine/Vitrine';
 
@@ -23,5 +22,11 @@ export class ContentContainer extends Component {
 
   init(): ContentContainer {
     return this;
+  }
+
+  destroy(): void {
+    this.contentHeader.destroy();
+    this.vitrine.destroy();
+    super.destroy();
   }
 }

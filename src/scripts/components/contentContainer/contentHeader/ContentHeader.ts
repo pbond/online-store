@@ -15,6 +15,7 @@ export class ContentHeader extends Component {
     super(tagName, className);
     this.sortSelector = new SortSelector('div', 'filter__sort', ['price', 'rating', 'stock']);
     this.viewModeToggle = new ViewModeToggle('div', 'display-container');
+    this.update = this.update.bind(this);
   }
 
   render(): HTMLElement {
@@ -33,13 +34,18 @@ export class ContentHeader extends Component {
   }
 
   init(): ContentHeader {
-    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
-      this.update(filteredProducts);
-    });
+    eventBus.on('updatefilter', this.update);
     return this;
   }
 
   private update(filteredProducts: IProduct[]): void {
     this.elements.countSpan.textContent = `Count: ${filteredProducts.length}`;
+  }
+
+  destroy(): void {
+    eventBus.off('updatefilter', this.update);
+    this.sortSelector.destroy();
+    this.viewModeToggle.destroy();
+    super.destroy();
   }
 }
