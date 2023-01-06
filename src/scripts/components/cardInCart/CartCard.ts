@@ -1,149 +1,143 @@
-import './cartCard.scss';
 import { Component } from '../../../types/templates/Component';
-import { IProduct } from '../../../types/models/IProduct';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
+import { IProduct } from '../../../types/models/IProduct';
 import eventBus from '../../helpers/EventBus';
+import { Button } from '../button/Button';
+import './cartCard.scss';
 
 export class CartCard extends Component {
-  product: IProduct;
-  count = 0;
-
+  private product: IProduct;
+  private count: number;
   constructor(product: IProduct, count: number) {
-    super('div', 'card');
+    super('div', 'card-body cartcard-hovered');
     this.product = product;
     this.count = count;
   }
 
   render(): HTMLElement {
-    this.container.append(this.createCardHeader());
-    this.container.append(this.createCardBody());
+    const cardLayout = ElementGenerator.createElementByInnerHtml<HTMLDivElement>(`
+      <div class="row g-0">
+        <div class="col-sm-4">
+          <a href="#/details?id=${this.product.id}" class="card__link">
+            <img src="${this.product.thumbnail}" class="card-list__image card-img-top" alt="${this.product.title}">
+          </a>
+        </div>
+        <div class="col-sm-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="#/details?id=${this.product.id}" class="card__link">
+                ${this.product.title}
+              </a>
+            </h5>
+            <p class="card__description card-text">${this.product.description}</p>
+            <div class="card__info">
+              <p class="card__info-item card-text"><small class="text-muted">Category: ${this.product.category}</small></p>
+              <p class="card__info-item card-text"><small class="text-muted">Brand: ${this.product.brand}</small></p>
+              <p class="card__info-item card-text"><small class="text-muted">Stock: ${this.product.stock}</small></p>
+              <p class="card__info-item card-text"><small class="text-muted">Rating: ${this.product.rating}</small></p>
+              <p class="card__info-item card-text"><small class="text-muted">Discount: ${this.product.discountPercentage}%</small></p>
+            </div>
+          </div>
+        </div>
+      </div>`);
+
+    this.container.append(cardLayout);
+
+    const controlsContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'card__controls',
+    });
+    controlsContainer.append(this.createMinusButton(), this.createCountField(), this.createPlusButton());
+    this.container.append(controlsContainer);
+
+    const removeContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'card__remove' });
+    removeContainer.append(this.createRemoveButton());
+    this.container.append(removeContainer);
+
     return this.container;
   }
 
-  private createCardHeader(): HTMLDivElement {
-    this.elements.cardHeader = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'card-header',
-    });
-    this.elements.headerRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row' });
-    const titleColumn = ElementGenerator.createCustomElement('div', { className: 'col-9' });
-    const priceColumn = ElementGenerator.createCustomElement('div', {
-      className: 'col-3 fw-bold',
-      innerText: `Price: $${this.product.price}`,
-    });
-    const anchor = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
-      href: this.getProductURL(),
-      innerText: this.product.title,
-    });
-    titleColumn.append(anchor);
-    this.elements.headerRow.append(titleColumn, priceColumn);
-    this.elements.cardHeader.append(this.elements.headerRow);
-    return this.elements.cardHeader as HTMLDivElement;
+  private createMinusButton(): HTMLButtonElement {
+    const button = new Button('btn btn-outline-secondary form-control rounded', '-', this.removeItem.bind(this));
+    return button.render();
   }
 
-  private createCardBody(): HTMLDivElement {
-    const cardBody = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'card-body' });
-    const row = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row' });
-    const colLeft = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'col-3' });
-    const img = ElementGenerator.createCustomElement<HTMLImageElement>('img', {
-      src: this.getThumbnailURL(),
-      alt: this.product.title,
-      className: 'w-75',
+  private createCountField(): HTMLInputElement {
+    const input = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
+      className: 'form-control text-center bi-input-cursor',
+      type: 'number',
+      min: 1,
+      max: this.product.stock,
+      value: this.count,
     });
-    const colCenter = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'col-6' });
-    const colRight = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'col-3 d-flex flex-wrap align-content-center',
-    });
+    input.disabled = true;
 
-    const description = ElementGenerator.createCustomElement<HTMLUListElement>('ul');
-    description.append(
-      ElementGenerator.createCustomElement<HTMLUListElement>('li', {
-        innerText: this.product.category,
-      }),
-      ElementGenerator.createCustomElement<HTMLUListElement>('li', {
-        innerText: this.product.brand,
-      }),
-      ElementGenerator.createCustomElement<HTMLUListElement>('li', {
-        innerText: this.product.description,
-      })
+    this.elements.countField = input;
+    return input;
+  }
+
+  private createPlusButton(): HTMLButtonElement {
+    const button = new Button('btn btn-outline-secondary form-control rounded', '+', this.addItem.bind(this));
+    return button.render();
+  }
+
+  private createRemoveButton(): HTMLButtonElement {
+    const button = new Button(
+      'btn btn-outline-secondary form-control border-0 remove-icon',
+      '',
+      this.removeProductFromCart.bind(this)
     );
-
-    colLeft.append(img);
-    colCenter.append(description);
-    colRight.append(this.createControls());
-    colRight.append(this.createTotalPrice());
-
-    row.append(colLeft, colCenter, colRight);
-    cardBody.append(row);
-
-    return cardBody;
+    const buttonElement = button.render();
+    buttonElement.innerHTML = `<i class="bi bi-trash fs-3"></i>`;
+    this.elements.removeButton = buttonElement;
+    return buttonElement;
   }
 
-  private createControls(): HTMLDivElement {
-    const controlsRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row w-100' });
-    const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'col-8 d-flex align-items-center',
-    });
-    const inputGroup = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'input-group' });
-
-    inputGroup.append(
-      ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-        className: 'btn btn-outline-secondary form-control',
-        innerText: '-',
-        onclick: this.removeItem.bind(this),
-      }),
-      ElementGenerator.createCustomElement<HTMLInputElement>('input', {
-        type: 'number',
-        value: 1,
-        min: 1,
-        max: this.product.stock,
-        step: 1,
-        className: 'form-control text-center border-0',
-      }),
-      ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-        className: 'btn btn-outline-secondary form-control',
-        innerText: '+',
-        onclick: this.addItem.bind(this),
-      })
-    );
-
-    const removeIcon = ElementGenerator.createCustomElement<HTMLElement>('i', { className: 'bi bi-trash fs-3' });
-    const removeButton = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-      className: 'btn btn-outline-secondary form-control border-0 remove-icon',
-    });
-    const removeCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'col-4' });
-    removeButton.append(removeIcon);
-    removeCol.append(removeButton);
-
-    controlsCol.append(inputGroup);
-    controlsRow.append(controlsCol, removeCol);
-    return controlsRow;
+  private addItem(/*event: PointerEvent*/): void {
+    this.count += 1;
+    (this.elements.countField as HTMLInputElement).value = this.count + '';
+    eventBus.trigger('addProductItem', this.product);
   }
 
-  private createTotalPrice(): HTMLDivElement {
-    const totalRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row w-100' });
-    const controlsCol = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'col-8 d-flex align-items-center',
-      innerText: this.product.price * this.count,
-    });
-    totalRow.append(controlsCol);
-    return totalRow;
+  private removeItem(/*event: PointerEvent*/): void {
+    this.count -= 1;
+    (this.elements.countField as HTMLInputElement).value = this.count + '';
+    eventBus.trigger('removeProductItem', this.product);
   }
 
-  private getProductURL(): string {
-    return `/#/product/${this.product.id}`;
-  }
-
-  private getThumbnailURL(): string {
-    return this.product.thumbnail;
-  }
-
-  private addItem(): void {
-    console.log('add item');
-    eventBus.trigger('addProductToCart', this.product.id);
-  }
-
-  private removeItem(): void {
-    console.log('remove item');
-    eventBus.trigger('removeProductFromCart', this.product.id);
+  private removeProductFromCart(/*event: PointerEvent*/): void {
+    eventBus.trigger('removeProductFromCart', this.product);
+    this.container.remove();
   }
 }
+
+// <div class="card-body">
+// <div class="row g-0">
+// <div class="col-sm-4">
+// <a href="#/details?id=1" class="card__link">
+// <img src="https://i.dummyjson.com/data/products/1/thumbnail.jpg" class="card-list__image card-img-top" alt="iPhone 9">
+//   </a>
+//   </div>
+//   <div class="col-sm-8">
+// <div class="card-body">
+// <h5 class="card-title">iPhone 9</h5>
+// <p class="card__description card-text">An apple mobile which is nothing like apple</p>
+// <div class="card__info">
+// <p class="card__info-item card-text"><small class="text-muted">Catygory: smartphones</small></p>
+// <p class="card__info-item card-text"><small class="text-muted">Brand: Apple</small></p>
+// <p class="card__info-item card-text"><small class="text-muted">Stock: 94</small></p>
+// <p class="card__info-item card-text"><small class="text-muted">Rating: 4.69</small></p>
+// </div>
+// </div>
+// </div>
+// </div>
+// <div class="card__controls">
+// <button class="btn btn-outline-secondary form-control rounded-pill">-</button>
+//   <input type="number" min="1" max="5" value="2" class="form-control text-center border-0 bi-input-cursor">
+// <button class="btn btn-outline-secondary form-control rounded-pill">+</button>
+//   </div>
+//   <div class="card__remove">
+// <button class="btn btn-outline-secondary form-control border-0 remove-icon">
+// <i class="bi bi-trash fs-3"></i>
+//   </button>
+//   </div>
+//   </div>

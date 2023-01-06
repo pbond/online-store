@@ -22,7 +22,7 @@ class Application {
   render() {
     const header = new Header();
     document.body.insertAdjacentElement('afterbegin', header.render());
-    header.init();
+    header.init().updateCart();
 
     const footer = new Footer();
     document.body.insertAdjacentElement('beforeend', footer.render());
