@@ -2,12 +2,42 @@ input[type="number"]::-webkit-inner-spin-button {
   display: none;
 }
 
-.card:hover {
+.cartcard-hovered {
+  position: relative;
+  transition: box-shadow, transform 0.5s ease;
+
   .remove-icon {
-    display: block;
+    display: none;
+  }
+
+  &:hover {
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.5);
+    transform: translate3d(0px, -2px, 0px);
+
+    .remove-icon {
+      display: block;
+    }
   }
 }
 
-.remove-icon {
-  display: none;
+.card-body + .card-body {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.card__controls {
+  display: flex;
+  align-items: end;
+  gap: 0.2rem;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.card__remove {
+  display: flex;
+  align-items: end;
+  gap: 0.2rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
