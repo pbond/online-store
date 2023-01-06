@@ -9,7 +9,9 @@ type EnentBusType =
   | 'setFilterButtonVisibility'
   | 'toggleSidebarClass'
   | 'addProductItem'
-  | 'removeProductItem';
+  | 'removeProductItem'
+  | 'showCartPage'
+  | 'changeCartPaginationLimit';
 
 class EventBus {
   private readonly events: EventsDictionary;
