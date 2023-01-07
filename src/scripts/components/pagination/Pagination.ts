@@ -1,3 +1,4 @@
+import './pagination.scss';
 import { Component } from '../../../types/templates/Component';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -7,11 +8,13 @@ export class Pagination extends Component {
   private productsInCartCount: number;
   private cartPageLimit: number;
   private cartPageNumber: number;
-  constructor(count: number) {
+
+  constructor(count: number, limit: number) {
     super('div', 'card-header');
     this.productsInCartCount = count;
-    this.cartPageLimit = parseInt(localStorage.getItem('cartPageLimit') ?? '5');
+    this.cartPageLimit = limit;
     this.cartPageNumber = 1;
+    this.cartPageLimit;
   }
 
   render(): HTMLElement {
@@ -25,6 +28,7 @@ export class Pagination extends Component {
 
     limit.append(this.createLimitRow());
     pageNum.append(this.createPagesRow());
+    this.updateButtons();
     row.append(limit, pageNum);
     this.container.append(row);
     return this.container;
@@ -42,6 +46,7 @@ export class Pagination extends Component {
       min: 1,
       max: this.productsInCartCount,
       value: this.cartPageLimit,
+      oninput: this.changeLimit.bind(this),
     });
 
     this.elements.inputLimit = inputLimit;
@@ -60,7 +65,7 @@ export class Pagination extends Component {
     });
 
     const prevButton = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-      className: 'page-link disabled form-control',
+      className: 'page-link form-control',
       ariaLabel: 'Previous',
       innerHTML: '<span aria-hidden="true">&laquo;</span>',
       onclick: this.showPrevPage.bind(this),
@@ -73,7 +78,7 @@ export class Pagination extends Component {
     });
 
     const nextButton = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-      className: 'page-link disabled form-control',
+      className: 'page-link form-control',
       ariaLabel: 'Next',
       innerHTML: '<span aria-hidden="true">&raquo;</span>',
       onclick: this.showNextPage.bind(this),
@@ -93,61 +98,46 @@ export class Pagination extends Component {
 
     container.append(list);
     return container;
-    // <li class="page-item">
-    // <button class="page-link disabled form-control" aria-label="Previous">
-    // <span aria-hidden="true">&laquo;</span>
-    // </button>
-    // </li>
-    // <li class="page-item">
-    // <button class="page-link active form-control border-top-0">1</button>
-    // </li>
-    // <li class="page-item">
-    // <button class="page-link form-control" aria-label="Next">
-    // <span aria-hidden="true">&raquo;</span>
-    // </button>
-    // </li>
   }
 
-  showPrevPage() {
-    // this.cartPageNumber -= 1;
-    // if (this.cartPageNumber === 1) {
-    // }
-    // eventBus.trigger('showCartPage', this.cartPageNumber);
+  changeLimit(): void {
+    const input = this.elements.inputLimit as HTMLInputElement;
+    if (parseInt(input.value) > this.productsInCartCount) {
+      input.value = this.productsInCartCount + '';
+    }
+    this.cartPageLimit = parseInt(input.value);
+    this.elements.currButton.innerHTML = '1';
+    this.cartPageNumber = 1;
+    eventBus.trigger('changeCartPaginationLimit', this.cartPageLimit);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  showNextPage() {}
+  showPrevPage(): void {
+    this.cartPageNumber -= 1;
+    this.elements.currButton.innerHTML = this.cartPageNumber + '';
+    eventBus.trigger('showCartPage', this.cartPageNumber);
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  destroy(): void {}
+  showNextPage(): void {
+    this.cartPageNumber += 1;
+    this.elements.currButton.innerHTML = this.cartPageNumber + '';
+    eventBus.trigger('showCartPage', this.cartPageNumber);
+  }
+
+  updateButtons(): void {
+    if (this.cartPageNumber === 1) {
+      this.elements.prevButton.classList.add('disabled');
+    } else {
+      this.elements.prevButton.classList.remove('disabled');
+    }
+
+    if (this.productsInCartCount <= this.cartPageLimit * this.cartPageNumber) {
+      this.elements.nextButton.classList.add('disabled');
+    } else {
+      this.elements.nextButton.classList.remove('disabled');
+    }
+  }
+
+  destroy(): void {
+    this.container.remove();
+  }
 }
-
-// <div class="card-header">
-// <div class="row">
-// <div class="col-12 offset-0 col-sm-6 col-md-4 offset-md-2 col-lg-4 offset-lg-4 col-xl-3 offset-xl-5">
-// <div class="input-group">
-// <span class="input-group-text w-50">Limit: </span>
-// <input type="number" min="1" max="5" value="2" class="text-center w-50 form-control"/>
-//   </div>
-//   </div>
-//   <div class="col-12 col-sm-6 col-lg-4 my-2 my-sm-0">
-// <div class="input-group justify-content-end">
-// <span class="input-group-text w-25">Page:</span>
-// <ul class="pagination mb-0 w-75">
-// <li class="page-item">
-// <button class="page-link disabled form-control" aria-label="Previous">
-// <span aria-hidden="true">&laquo;</span>
-// </button>
-// </li>
-// <li class="page-item"><button class="page-link active form-control border-top-0">1</button></li>
-// <li class="page-item">
-// <button class="page-link form-control" aria-label="Next">
-// <span aria-hidden="true">&raquo;</span>
-// </button>
-// </li>
-// </ul>
-// </div>
-// </div>
-// </div>
-// </div>
-//
