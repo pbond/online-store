@@ -32,8 +32,6 @@ export class CartCard extends Component {
                 <div class="col">
                   <a href="#/details?id=${this.product.id}" class="card__link">
                     ${this.product.title}
-                    ${this.product.title}
-                    ${this.product.title}
                   </a>
                 </div>
                 <div class="col flex-grow-0 text-end text-muted">(${this.position})</div>
