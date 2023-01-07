@@ -39,10 +39,12 @@ export class Header extends Component {
         .reduce((acc, { count }) => acc + count, 0)
         .toString();
       this.elements.cartBadgePrice.innerText =
-        '$' + state.cart.products.reduce((acc, { product }) => acc + product.price, 0).toFixed(2);
+        '$' + state.cart.products.reduce((acc, { product, count }) => acc + product.price * count, 0).toFixed(2);
     } else {
       this.elements.cartBadgeCount?.remove();
       this.elements.cartBadgePrice?.remove();
+      delete this.elements.cartBadgeCount;
+      delete this.elements.cartBadgePrice;
     }
   }
 
