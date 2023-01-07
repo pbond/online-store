@@ -5,18 +5,21 @@ import { Pagination } from '../../components/pagination/Pagination';
 import eventBus from '../../helpers/EventBus';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 import { ICartProducts } from '../../../types/models/ICartProduct';
+import { Summary } from '../../components/summary/Summary';
 
 export class Cart extends Page {
   private pageLimit: number;
   private cartItems: CartCard[];
   private cardsContainerElement: HTMLDivElement;
   private pagination: Pagination;
+  private summary: Summary;
 
   constructor(path?: string) {
     super(path);
     this.pageLimit = 3;
     this.cartItems = [];
     this.pagination = new Pagination(state.cart.products.length, this.pageLimit);
+    this.summary = new Summary();
 
     this.cardsContainerElement = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'card',
@@ -30,8 +33,14 @@ export class Cart extends Page {
       className: 'my-2 my-sm-3 my-md-4 offset-md-1 offset-lg-0',
       innerHTML: 'Products in cart',
     });
+    this.container.append(pageHeader);
+
+    if (state.cart.products.length === 0) {
+      return this.showEmptyCart();
+    }
+
     const contentRow = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'row',
+      className: 'row mb-4',
     });
     const contentColumns = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-0',
@@ -40,11 +49,11 @@ export class Cart extends Page {
       className: 'col-12 col-md-10 offset-md-1 col-lg-4 offset-lg-0 my-3 my-lg-0',
     });
 
-    // const summary = new Summary();
     this.cardsContainerElement.append(this.pagination.render());
     contentColumns.append(this.cardsContainerElement);
+    summaryColumns.append(this.summary.render());
     contentRow.append(contentColumns, summaryColumns);
-    this.container.append(pageHeader, contentRow);
+    this.container.append(contentRow);
 
     this.showCartPage();
     this.init();
@@ -59,6 +68,17 @@ export class Cart extends Page {
     eventBus.on('changeCartPaginationLimit', this.changeCartPaginationLimit);
     eventBus.on('showCartPage', this.showCartPage);
     eventBus.on('cartUpdated', this.onCartUpdated);
+  }
+
+  private showEmptyCart(): HTMLElement {
+    const content = ElementGenerator.createCustomElement<HTMLElement>('div', {
+      className: 'card-body text-center my-4',
+      innerHTML: `<h2>The cart is empty</h2>`,
+    });
+    this.cardsContainerElement.classList.add('my-4');
+    this.cardsContainerElement.append(content);
+    this.container.append(this.cardsContainerElement);
+    return this.container;
   }
 
   destroy() {
@@ -86,7 +106,16 @@ export class Cart extends Page {
 
   private updateCardsList(): void {
     this.clearExistCards();
-    this.cartItems = this.selectPageProducts().map((item) => new CartCard(item.product, item.count));
+    this.cartItems = this.selectPageProducts().map(
+      (item) => new CartCard(item.product, item.count, state.cart.products.indexOf(item) + 1)
+    );
+
+    if (this.cartItems.length === 0) {
+      this.pagination.destroy();
+      this.summary.destroy();
+      this.container.lastElementChild?.remove();
+      this.container = this.showEmptyCart();
+    }
 
     this.cartItems.forEach((item) => {
       this.cardsContainerElement.append(item.render());
