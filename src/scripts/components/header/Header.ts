@@ -3,6 +3,7 @@ import { ElementGenerator } from '../../helpers/ElementGenerator';
 import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
 import './header.scss';
+
 export class Header extends Component {
   constructor() {
     super('header', '');
@@ -19,13 +20,30 @@ export class Header extends Component {
   }
 
   updateCart(): void {
-    if (!this.elements.cartBadge) {
-      this.elements.cartBadge = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
+    if (!this.elements.cartBadgeCount && state.cart.products.length > 0) {
+      this.elements.cartBadgeCount = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
         className: 'badge position-absolute top-20 start-100 translate-middle bg-danger rounded-circle',
       });
-      this.elements.cartAnchor.append(this.elements.cartBadge);
+      this.elements.cartAnchor.append(this.elements.cartBadgeCount);
     }
-    this.elements.cartBadge.innerText = state.cart.products.length + '';
+
+    if (!this.elements.cartBadgePrice && state.cart.products.length > 0) {
+      this.elements.cartBadgePrice = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
+        className: 'badge position-absolute top-100 start-50 translate-middle bg-primary rounded-pill w-100',
+      });
+      this.elements.cartAnchor.append(this.elements.cartBadgePrice);
+    }
+
+    if (state.cart.products.length > 0) {
+      this.elements.cartBadgeCount.innerText = state.cart.products
+        .reduce((acc, { count }) => acc + count, 0)
+        .toString();
+      this.elements.cartBadgePrice.innerText =
+        '$' + state.cart.products.reduce((acc, { product }) => acc + product.price, 0).toFixed(2);
+    } else {
+      this.elements.cartBadgeCount?.remove();
+      this.elements.cartBadgePrice?.remove();
+    }
   }
 
   toggleFilterButton(isVisible: boolean): void {
