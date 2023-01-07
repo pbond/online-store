@@ -34,7 +34,7 @@ export class CartCard extends Component {
                     ${this.product.title}
                   </a>
                 </div>
-                <div class="col flex-grow-0 text-end text-muted">(${this.position})</div>
+                <div class="col flex-grow-0 text-end text-muted text-decoration-underline">${this.position}</div>
               </div>
             </h5>
             <p class="card__description card-text">${this.product.description}</p>
