@@ -1,4 +1,4 @@
-.card {
+.card-vitrine {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -14,13 +14,20 @@
   height: 100%;
 }
 
+.card__img-cont {
+  padding: 0.2rem;
+  align-self: center;
+}
+
 .card__image {
   height: 235px;
+  border-radius: 0.2rem;
   object-fit: cover;
 }
 
 .card-list__image {
   height: 250px;
+  border-radius: 0.2rem;
   object-fit: cover;
 }
 
@@ -34,13 +41,30 @@
 
 .card__btn {
   margin-left: 0.5rem;
+  min-width: 131px;
 }
 
 .card__price {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 0.2rem;
   position: absolute;
   bottom: 1rem;
   right: 1rem;
 }
+
+.card__price-vitrine {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
 .card__description {
   margin-bottom: 0.1rem;
+}
+
+.card__btn-now {
+  margin-left: 0.5rem;
+  min-width: 131px;
 }

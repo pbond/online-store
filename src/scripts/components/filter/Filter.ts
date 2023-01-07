@@ -28,12 +28,11 @@ export class Filter<T extends object> extends Component {
     ];
     this.groups = this.initGroups(this.etalonList, this.groupValues);
     this.checkBoxEventHandler = this.checkBoxEventHandler.bind(this);
+    this.update = this.update.bind(this);
   }
 
   init(): Filter<T> {
-    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
-      this.update(filteredProducts);
-    });
+    eventBus.on('updatefilter', this.update);
     return this;
   }
 
@@ -140,5 +139,10 @@ export class Filter<T extends object> extends Component {
 
   private getItemsByGroupValue<T>(list: T[], groupValue: string): T[] {
     return list.filter((item) => String(Object.getOwnPropertyDescriptor(item, this.groupName)?.value) === groupValue);
+  }
+
+  destroy(): void {
+    eventBus.off('updatefilter', this.update);
+    super.destroy();
   }
 }

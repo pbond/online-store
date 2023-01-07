@@ -1,16 +1,15 @@
 import { Component } from '../../../types/templates/Component';
 import './contentContainer.scss';
-//import { ViewModeToggle } from './viewModeToggle/ViewModeToggle';
 import { ContentHeader } from './contentHeader/ContentHeader';
-import { VitrineCard } from '../cardInVitrine/VitrineCard';
+import { Vitrine } from '../vitrine/Vitrine';
 
 export class ContentContainer extends Component {
   private contentHeader: ContentHeader;
-  private vitrine: VitrineCard;
+  private vitrine: Vitrine;
   constructor(tagName: string, className: string) {
     super(tagName, className);
     this.contentHeader = new ContentHeader('div', 'shop-content__header');
-    this.vitrine = new VitrineCard('div', 'shop-content__vitrine');
+    this.vitrine = new Vitrine('div', 'shop-content__vitrine');
   }
 
   render(): HTMLElement {
@@ -23,5 +22,11 @@ export class ContentContainer extends Component {
 
   init(): ContentContainer {
     return this;
+  }
+
+  destroy(): void {
+    this.contentHeader.destroy();
+    this.vitrine.destroy();
+    super.destroy();
   }
 }
