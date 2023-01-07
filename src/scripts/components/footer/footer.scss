@@ -4,20 +4,15 @@ footer .logo:before {
   filter: invert(100%);
   display: block;
   background-repeat: no-repeat;
-  height: 4vh;
-  width: 28vw;
-  min-width: 120px;
+  height: 2rem;
+  width: 6rem;
 }
 
 @media (min-width: 576px) {
   footer {
-    height: 6vh;
+    height: auto;
     min-height: 25px;
-  }
-
-  footer .logo:before {
-    height: 4vh;
-    width: 24vw;
+    flex-shrink: 0;
   }
 }
 
