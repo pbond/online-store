@@ -10,8 +10,9 @@ footer .logo:before {
 
 @media (min-width: 576px) {
   footer {
-    height: 6vh;
+    height: auto;
     min-height: 25px;
+    flex-shrink: 0;
   }
 }
 

@@ -8,8 +8,12 @@ import { ViewModeEnum } from '../../../types/enums/ViewModeEnum';
 import { VitrineCard } from '../../../scripts/components/cardInVitrine/VitrineCard';
 
 export class Vitrine extends Component {
+  private vitrineCards: VitrineCard[];
   constructor(tagName: string, className: string) {
     super(tagName, className);
+    this.vitrineCards = [];
+    this.changeViewUpdateHandler = this.changeViewUpdateHandler.bind(this);
+    this.updateFilterHandler = this.updateFilterHandler.bind(this);
   }
 
   render(): HTMLElement {
@@ -22,68 +26,65 @@ export class Vitrine extends Component {
   }
 
   init(): Vitrine {
-    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
-      if (state.filter) {
-        this.updateVitrine(filteredProducts, state.filter.viewMode);
-      }
-    });
-    eventBus.on('changeViewMode', (viewMode: ViewModeEnum) => {
-      if (state.filter) {
-        this.updateVitrine(state.filter.filteredProducts, viewMode);
-      }
-    });
+    eventBus.on('updatefilter', this.updateFilterHandler);
+    eventBus.on('changeViewMode', this.changeViewUpdateHandler);
     return this;
   }
 
+  private updateFilterHandler(filteredProducts: IProduct[]) {
+    if (state.filter) {
+      this.updateVitrine(filteredProducts, state.filter.viewMode);
+    }
+  }
+
+  private changeViewUpdateHandler(viewMode: ViewModeEnum) {
+    if (state.filter) {
+      this.updateVitrine(state.filter.filteredProducts, viewMode);
+    }
+  }
+
   private updateVitrine(filteredProducts: IProduct[], viewMode: ViewModeEnum) {
+    this.container.innerHTML = '';
     if (filteredProducts.length === 0) {
       this.elements.vitrine = ElementGenerator.createCustomElement('h3', {
         className: 'card__notfound',
         textContent: 'No products found',
       });
     } else {
-      switch (viewMode) {
-        case ViewModeEnum.List:
-          this.elements.vitrine = this.renderListVitrine(filteredProducts);
-          break;
-        case ViewModeEnum.Grid:
-          this.elements.vitrine = this.renderGridVitrine(filteredProducts);
-          break;
-        default:
-          break;
-      }
+      this.elements.vitrine = this.renderVitrine(filteredProducts, viewMode);
     }
-    this.container.innerHTML = '';
     this.container.append(this.elements.vitrine);
   }
 
-  private renderGridVitrine(products: IProduct[]): HTMLElement {
-    const gridContainer = ElementGenerator.createCustomElement('div', {
+  private renderVitrine(products: IProduct[], viewMode: ViewModeEnum): HTMLElement {
+    let container = ElementGenerator.createCustomElement('div', {
       className: 'grid-container row row-cols-1 row-cols-sm-2  row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-2',
     });
+    if (viewMode === ViewModeEnum.List) {
+      container = ElementGenerator.createCustomElement('div', {
+        className: 'grid-container row row-cols-1 g-2',
+      });
+    }
     products.forEach((product) => {
       const column = ElementGenerator.createCustomElement('div', {
         className: 'col',
       });
-      const vitrineCard = new VitrineCard('div', 'vitrine-card', product, ViewModeEnum.Grid);
-      column.append(vitrineCard.render());
-      gridContainer.append(column);
+      let vitrineCard = this.vitrineCards.find((card) => card.product.id === product.id);
+      if (vitrineCard) {
+        column.append(vitrineCard.getRenderedCard(viewMode));
+      } else {
+        vitrineCard = new VitrineCard('div', 'vitrine-card', product, viewMode);
+        this.vitrineCards.push(vitrineCard);
+        column.append(vitrineCard.render());
+      }
+      container.append(column);
     });
-    return gridContainer;
+    return container;
   }
 
-  private renderListVitrine(products: IProduct[]): HTMLElement {
-    const listContainer = ElementGenerator.createCustomElement('div', {
-      className: 'grid-container row row-cols-1 g-2',
-    });
-    products.forEach((product) => {
-      const column = ElementGenerator.createCustomElement('div', {
-        className: 'col',
-      });
-      const vitrineCard = new VitrineCard('div', 'vitrine-card', product, ViewModeEnum.List);
-      column.append(vitrineCard.render());
-      listContainer.append(column);
-    });
-    return listContainer;
+  destroy(): void {
+    eventBus.off('updatefilter', this.updateFilterHandler);
+    eventBus.off('changeViewMode', this.changeViewUpdateHandler);
+    this.vitrineCards?.forEach((card) => card.destroy());
   }
 }

@@ -8,14 +8,19 @@ import { ViewModeEnum } from '../../../types/enums/ViewModeEnum';
 import { Button } from '../button/Button';
 
 export class VitrineCard extends Component {
-  private product: IProduct;
+  private _product: IProduct;
   private ViewMode: ViewModeEnum;
   private isInCart: boolean;
+  get product(): IProduct {
+    return this._product;
+  }
   constructor(tagName: string, className: string, product: IProduct, viewMode: ViewModeEnum) {
     super(tagName, className);
-    this.product = product;
+    this._product = product;
     this.ViewMode = viewMode;
     this.isInCart = false;
+    this.addProductToCartHandler = this.addProductToCartHandler.bind(this);
+    this.removeProductFromCartHandler = this.removeProductFromCartHandler.bind(this);
   }
 
   render(): HTMLElement {
@@ -31,14 +36,32 @@ export class VitrineCard extends Component {
     return this.container;
   }
 
+  getRenderedCard(viewMode: ViewModeEnum): HTMLElement {
+    if (this.ViewMode === viewMode) {
+      return this.container;
+    } else {
+      this.ViewMode = viewMode;
+      this.container.innerHTML = '';
+      switch (this.ViewMode) {
+        case ViewModeEnum.Grid:
+          this.container = this.renderCardGrid();
+          break;
+        case ViewModeEnum.List:
+          this.container = this.renderCardList();
+          break;
+      }
+    }
+    return this.container;
+  }
+
   init(): VitrineCard {
-    eventBus.on('addProductToCart', this.addProductToCartHandler.bind(this));
-    eventBus.on('removeProductFromCart', this.removeProductFromCartHandler.bind(this));
+    eventBus.on('addProductToCart', this.addProductToCartHandler);
+    eventBus.on('removeProductFromCart', this.removeProductFromCartHandler);
     return this;
   }
 
   private addProductToCartHandler(product: IProduct): void {
-    if (this.product.id === product.id) {
+    if (this._product.id === product.id) {
       if (!this.elements) {
         return;
       }
@@ -154,5 +177,11 @@ export class VitrineCard extends Component {
         eventBus.trigger('addProductToCart', this.product);
       }
     }
+  }
+
+  destroy(): void {
+    eventBus.off('addProductToCart', this.addProductToCartHandler);
+    eventBus.off('removeProductFromCart', this.removeProductFromCartHandler);
+    super.destroy();
   }
 }

@@ -28,6 +28,11 @@ export class Details extends Page {
   }
 
   render(): HTMLElement {
+    const head = ElementGenerator.createCustomElement<HTMLElement>('h2', {
+      className: 'my-2 my-sm-3 my-md-4 offset-lg-0',
+      textContent: 'Product details',
+    });
+    this.container.append(head);
     if (this.breadcrumb) {
       this.container.append(this.breadcrumb.render());
     }
@@ -41,6 +46,7 @@ export class Details extends Page {
       this.container.append(notFoundElement);
     }
     this.container.classList.add('details');
+    this.container.classList.add('container');
     return this.container;
   }
 
@@ -58,5 +64,11 @@ export class Details extends Page {
       return null;
     }
     return product;
+  }
+
+  destroy(): void {
+    this.cardDetails?.destroy();
+    this.breadcrumb?.destroy();
+    super.destroy();
   }
 }

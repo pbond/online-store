@@ -1,6 +1,7 @@
 import './pagination.scss';
 import { Component } from '../../../types/templates/Component';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import eventBus from '../../helpers/EventBus';
 
 export class Pagination extends Component {

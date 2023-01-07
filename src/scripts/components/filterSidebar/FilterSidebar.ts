@@ -36,7 +36,7 @@ export class FilterSidebar extends Component {
 
   render(): HTMLElement {
     const navElement = ElementGenerator.createCustomElement<HTMLElement>('nav', {
-      className: 'filter__nav collapse d-lg-block sidebar collapse bg-white',
+      className: 'filter__nav collapse d-lg-block sidebar collapse',
       id: 'sidebarMenu',
     });
     const navcontainer = ElementGenerator.createCustomElement<HTMLElement>('div', {
@@ -80,5 +80,16 @@ export class FilterSidebar extends Component {
         currentTarget.textContent = currenText;
       }, 500);
     }
+  }
+
+  destroy(): void {
+    this.clearButton.destroy();
+    this.copyButton.destroy();
+    this.search.destroy();
+    this.brandsFilter.destroy();
+    this.categorysFilter.destroy();
+    this.priceSlider.destroy();
+    this.stockSlider.destroy();
+    super.destroy();
   }
 }

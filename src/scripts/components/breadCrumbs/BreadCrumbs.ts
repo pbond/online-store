@@ -24,7 +24,7 @@ export class BreadCrumbs<T extends object> extends Component {
     const breadCrumbs = ElementGenerator.createCustomElement<HTMLOListElement>('ol', {
       className: 'breadcrumb',
     });
-    let link = `${this.homeLink.link}?view-mode=${this.homeLink.viewMode}&`;
+    let link = `${this.homeLink.link}?view-mode=${this.homeLink.viewMode}`;
 
     const firstItem = ElementGenerator.createElementByInnerHtml<HTMLLIElement>(`
     <li class="breadcrumb-item"><a href="${link}">${this.homeLink.name.toUpperCase()}</a></li>`);
@@ -32,7 +32,7 @@ export class BreadCrumbs<T extends object> extends Component {
 
     this.crumbsProperties.slice(0, -1).forEach((crumb) => {
       const crumbValue = String(Object.getOwnPropertyDescriptor(this.product, crumb)?.value);
-      link = `${link}${crumb}=${crumbValue}&`;
+      link = `${link}&${crumb}=${crumbValue}`;
       const item = ElementGenerator.createElementByInnerHtml<HTMLLIElement>(`
       <li class="breadcrumb-item"><a href="${link}">${crumbValue.toUpperCase()}</a></li>`);
       breadCrumbs.append(item);

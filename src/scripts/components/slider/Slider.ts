@@ -5,7 +5,6 @@ import './slider.scss';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
-import { IProduct } from '../../../types/models/IProduct';
 
 export class Slider<T extends object> extends Component {
   private defaultMin: number;
@@ -29,6 +28,7 @@ export class Slider<T extends object> extends Component {
     this.slider = null;
     this.minSpan = null;
     this.maxSpan = null;
+    this.updateSliderProperties = this.updateSliderProperties.bind(this);
   }
 
   render(): HTMLElement {
@@ -74,9 +74,7 @@ export class Slider<T extends object> extends Component {
   }
 
   init(): Slider<T> {
-    eventBus.on('updatefilter', (filteredProducts: IProduct[]) => {
-      this.updateSliderProperties(filteredProducts);
-    });
+    eventBus.on('updatefilter', this.updateSliderProperties);
     this.slider?.noUiSlider?.on('change', this.sliderChangeEventHandler.bind(this));
     return this;
   }
@@ -133,5 +131,11 @@ export class Slider<T extends object> extends Component {
       null,
       list.map((item) => Number(Object.getOwnPropertyDescriptor(item, propertyName)?.value))
     );
+  }
+
+  destroy(): void {
+    eventBus.off('updatefilter', this.updateSliderProperties);
+    this.slider?.noUiSlider?.off('change');
+    super.destroy();
   }
 }
