@@ -6,9 +6,11 @@ import eventBus from '../../helpers/EventBus';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
 import { ICartProducts } from '../../../types/models/ICartProduct';
 import { Summary } from '../../components/summary/Summary';
+import { PaginationEnum } from '../../../types/enums/PaginationEnum';
 
 export class Cart extends Page {
   private pageLimit: number;
+  private pageNum: number;
   private cartItems: CartCard[];
   private cardsContainerElement: HTMLDivElement;
   private pagination: Pagination;
@@ -16,11 +18,18 @@ export class Cart extends Page {
 
   constructor(path?: string) {
     super(path);
+    const searchParams = new URLSearchParams(path);
     this.pageLimit = 3;
+    this.pageNum = 1;
     this.cartItems = [];
-    this.pagination = new Pagination(state.cart.products.length, this.pageLimit);
-    this.summary = new Summary();
-
+    this.summary = new Summary(state.cart.products);
+    if (searchParams.get(PaginationEnum.pageLimit)) {
+      this.pageLimit = parseInt(searchParams.get(PaginationEnum.pageLimit) ?? '');
+    }
+    if (searchParams.get(PaginationEnum.pageNum)) {
+      this.pageNum = parseInt(searchParams.get(PaginationEnum.pageNum) ?? '');
+    }
+    this.pagination = new Pagination(state.cart.products.length, this.pageLimit, this.pageNum);
     this.cardsContainerElement = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'card',
     });
@@ -55,7 +64,7 @@ export class Cart extends Page {
     contentRow.append(contentColumns, summaryColumns);
     this.container.append(contentRow);
 
-    this.showCartPage();
+    this.showCartPage(this.pageNum);
     this.init();
     return this.container;
   }
@@ -91,17 +100,18 @@ export class Cart extends Page {
   private changeCartPaginationLimit(limit: number): void {
     this.pageLimit = limit;
     this.updateCardsList();
-    this.pagination.updateButtons(state.cart.products.length);
+    this.pagination.updateButtons(state.cart.products.length, this.pageNum);
   }
 
-  private showCartPage(): void {
+  private showCartPage(pageNum: number): void {
+    this.pageNum = pageNum;
     this.updateCardsList();
-    this.pagination.updateButtons(state.cart.products.length);
+    this.pagination.updateButtons(state.cart.products.length, this.pageNum);
   }
 
   private onCartUpdated(): void {
     this.updateCardsList();
-    this.pagination.updateButtons(state.cart.products.length);
+    this.pagination.updateButtons(state.cart.products.length, this.pageNum);
   }
 
   private updateCardsList(): void {
@@ -129,11 +139,11 @@ export class Cart extends Page {
   }
 
   private selectPageProducts(): ICartProducts {
-    const startPosition = this.pageLimit * (this.pagination.pageNumber - 1);
+    const startPosition = this.pageLimit * (this.pageNum - 1);
     const lastPosition = startPosition + this.pageLimit;
     const selected = state.cart.products.slice(startPosition, lastPosition);
     if (selected.length === 0 && state.cart.products.length > 0) {
-      this.pagination.pageNumber -= 1;
+      this.pageNum -= 1;
       return this.selectPageProducts();
     }
     return selected;
