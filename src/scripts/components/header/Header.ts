@@ -61,7 +61,7 @@ export class Header extends Component {
   private createBrandLink(): HTMLAnchorElement {
     const link = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
       className: 'navbar-brand',
-      href: '/#/main',
+      href: '#/main',
       innerText: 'Online store',
     });
     link.insertAdjacentHTML('afterbegin', '<i class="bi bi-shop-window px-2"></i>');
@@ -115,9 +115,9 @@ export class Header extends Component {
     ul.insertAdjacentHTML(
       'afterbegin',
       `<li class="nav-item mr-auto">
-        <a href="#/details" class="nav-link">
+        <a href="#/vendors" class="nav-link">
           <i class="bi bi-archive"></i>
-          Details</a>
+          Vendors</a>
       </li>
       <li class="nav-item">
         <a href="#/contacts" class="nav-link">
@@ -146,7 +146,7 @@ export class Header extends Component {
 
     this.elements.cartAnchor = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
       className: 'nav-link position-relative',
-      href: '/#/cart',
+      href: '#/cart',
       innerHTML: '<i class="bi bi-cart pe-2"></i>Cart',
     });
 
