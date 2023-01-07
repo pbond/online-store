@@ -1,7 +1,6 @@
 import './pagination.scss';
 import { Component } from '../../../types/templates/Component';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import eventBus from '../../helpers/EventBus';
 
 export class Pagination extends Component {
@@ -14,10 +13,9 @@ export class Pagination extends Component {
     this.productsInCartCount = count;
     this.cartPageLimit = limit;
     this.cartPageNumber = 1;
-    this.cartPageLimit;
   }
 
-  render(): HTMLElement {
+  public render(): HTMLElement {
     const row = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'row' });
     const limit = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'col-12 col-sm-6 col-md-4 offset-md-2 col-lg-4 offset-lg-4 col-xl-3 offset-xl-5',
@@ -28,13 +26,13 @@ export class Pagination extends Component {
 
     limit.append(this.createLimitRow());
     pageNum.append(this.createPagesRow());
-    this.updateButtons();
+    this.updateButtons(this.productsInCartCount);
     row.append(limit, pageNum);
     this.container.append(row);
     return this.container;
   }
 
-  createLimitRow(): HTMLDivElement {
+  private createLimitRow(): HTMLDivElement {
     const container = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'input-group',
       innerHTML: '<span class="input-group-text w-50">Limit: </span>',
@@ -54,7 +52,7 @@ export class Pagination extends Component {
     return container;
   }
 
-  createPagesRow(): HTMLDivElement {
+  private createPagesRow(): HTMLDivElement {
     const container = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'input-group justify-content-end',
       innerHTML: '<span class="input-group-text w-25">Page:</span>',
@@ -100,7 +98,7 @@ export class Pagination extends Component {
     return container;
   }
 
-  changeLimit(): void {
+  private changeLimit(): void {
     const input = this.elements.inputLimit as HTMLInputElement;
     if (parseInt(input.value) > this.productsInCartCount) {
       input.value = this.productsInCartCount + '';
@@ -111,19 +109,20 @@ export class Pagination extends Component {
     eventBus.trigger('changeCartPaginationLimit', this.cartPageLimit);
   }
 
-  showPrevPage(): void {
+  private showPrevPage(): void {
     this.cartPageNumber -= 1;
-    this.elements.currButton.innerHTML = this.cartPageNumber + '';
     eventBus.trigger('showCartPage', this.cartPageNumber);
   }
 
-  showNextPage(): void {
+  private showNextPage(): void {
     this.cartPageNumber += 1;
-    this.elements.currButton.innerHTML = this.cartPageNumber + '';
     eventBus.trigger('showCartPage', this.cartPageNumber);
   }
 
-  updateButtons(): void {
+  public updateButtons(productsCount: number): void {
+    this.productsInCartCount = productsCount;
+    this.elements.currButton.innerHTML = this.cartPageNumber + '';
+
     if (this.cartPageNumber === 1) {
       this.elements.prevButton.classList.add('disabled');
     } else {
@@ -135,6 +134,14 @@ export class Pagination extends Component {
     } else {
       this.elements.nextButton.classList.remove('disabled');
     }
+  }
+
+  public get pageNumber(): number {
+    return this.cartPageNumber;
+  }
+
+  public set pageNumber(pageNum) {
+    this.cartPageNumber = pageNum;
   }
 
   destroy(): void {

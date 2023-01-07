@@ -9,7 +9,7 @@ import { ICartProducts } from '../../../types/models/ICartProduct';
 export class Cart extends Page {
   private pageLimit: number;
   private cartItems: CartCard[];
-  private cardsContainerElement: HTMLDivElement | null;
+  private cardsContainerElement: HTMLDivElement;
   private pagination: Pagination;
 
   constructor(path?: string) {
@@ -18,7 +18,9 @@ export class Cart extends Page {
     this.cartItems = [];
     this.pagination = new Pagination(state.cart.products.length, this.pageLimit);
 
-    this.cardsContainerElement = null;
+    this.cardsContainerElement = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'card',
+    });
   }
 
   render(): HTMLElement {
@@ -37,18 +39,14 @@ export class Cart extends Page {
     const summaryColumns = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'col-12 col-md-10 offset-md-1 col-lg-4 offset-lg-0 my-3 my-lg-0',
     });
-    const cardsContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
-      className: 'card',
-    });
 
     // const summary = new Summary();
-    cardsContainer.append(this.pagination.render());
-    contentColumns.append(cardsContainer);
+    this.cardsContainerElement.append(this.pagination.render());
+    contentColumns.append(this.cardsContainerElement);
     contentRow.append(contentColumns, summaryColumns);
     this.container.append(pageHeader, contentRow);
 
-    this.cardsContainerElement = cardsContainer;
-    this.showCartPage(1);
+    this.showCartPage();
     this.init();
     return this.container;
   }
@@ -56,30 +54,43 @@ export class Cart extends Page {
   init() {
     this.changeCartPaginationLimit = this.changeCartPaginationLimit.bind(this);
     this.showCartPage = this.showCartPage.bind(this);
+    this.onCartUpdated = this.onCartUpdated.bind(this);
+
     eventBus.on('changeCartPaginationLimit', this.changeCartPaginationLimit);
     eventBus.on('showCartPage', this.showCartPage);
-    // eventBus.on('cartUpdated', this.action());
+    eventBus.on('cartUpdated', this.onCartUpdated);
   }
 
   destroy() {
     eventBus.off('showCartPage', this.showCartPage);
     eventBus.off('changeCartPaginationLimit', this.changeCartPaginationLimit);
+    eventBus.off('cartUpdated', this.onCartUpdated);
     this.container.remove();
   }
 
-  private changeCartPaginationLimit(limit: number) {
+  private changeCartPaginationLimit(limit: number): void {
     this.pageLimit = limit;
-    this.showCartPage(1);
-    this.pagination.updateButtons();
+    this.updateCardsList();
+    this.pagination.updateButtons(state.cart.products.length);
   }
 
-  private showCartPage(pageNum: number) {
+  private showCartPage(): void {
+    this.updateCardsList();
+    this.pagination.updateButtons(state.cart.products.length);
+  }
+
+  private onCartUpdated(): void {
+    this.updateCardsList();
+    this.pagination.updateButtons(state.cart.products.length);
+  }
+
+  private updateCardsList(): void {
     this.clearExistCards();
-    this.cartItems = this.selectPageProducts(pageNum).map((item) => new CartCard(item.product, item.count));
+    this.cartItems = this.selectPageProducts().map((item) => new CartCard(item.product, item.count));
+
     this.cartItems.forEach((item) => {
-      this.cardsContainerElement?.append(item.render());
+      this.cardsContainerElement.append(item.render());
     });
-    this.pagination.updateButtons();
   }
 
   private clearExistCards(): void {
@@ -88,9 +99,14 @@ export class Cart extends Page {
     });
   }
 
-  private selectPageProducts(pageNum: number): ICartProducts {
-    const startPosition = this.pageLimit * (pageNum - 1);
+  private selectPageProducts(): ICartProducts {
+    const startPosition = this.pageLimit * (this.pagination.pageNumber - 1);
     const lastPosition = startPosition + this.pageLimit;
-    return state.cart.products.slice(startPosition, lastPosition);
+    const selected = state.cart.products.slice(startPosition, lastPosition);
+    if (selected.length === 0 && state.cart.products.length > 0) {
+      this.pagination.pageNumber -= 1;
+      return this.selectPageProducts();
+    }
+    return selected;
   }
 }
