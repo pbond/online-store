@@ -94,6 +94,7 @@ export class Cart extends Page {
     eventBus.off('showCartPage', this.showCartPage);
     eventBus.off('changeCartPaginationLimit', this.changeCartPaginationLimit);
     eventBus.off('cartUpdated', this.onCartUpdated);
+    this.summary.destroy();
     this.container.remove();
   }
 
@@ -109,9 +110,9 @@ export class Cart extends Page {
     this.pagination.updateButtons(state.cart.products.length, this.pageNum);
   }
 
-  private onCartUpdated(): void {
+  private onCartUpdated(products: ICartProducts): void {
     this.updateCardsList();
-    this.pagination.updateButtons(state.cart.products.length, this.pageNum);
+    this.pagination.updateButtons(products.length, this.pageNum);
   }
 
   private updateCardsList(): void {

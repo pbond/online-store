@@ -2,15 +2,20 @@ import { ICartProducts } from '../../types/models/ICartProduct';
 import { IProduct } from '../../types/models/IProduct';
 import eventBus from '../helpers/EventBus';
 import { ICartState } from '../../types/models/ICartState';
+import { IPromoCode } from '../../types/models/IPromoCode';
+import promoCodesList from './PromoCodesList';
 
 class CartState implements ICartState {
   products: ICartProducts = [];
+
+  promoCodes: IPromoCode[] = [];
 
   constructor() {
     const cartProducts = localStorage.getItem('cartProducts');
     if (cartProducts !== null) {
       this.products = JSON.parse(cartProducts);
     }
+    this.promoCodes = promoCodesList;
   }
 
   init() {
