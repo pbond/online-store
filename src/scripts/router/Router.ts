@@ -1,6 +1,5 @@
 import { Routes } from './Routes';
 import { IRoute } from '../../types/router/IRoute';
-//import { Main } from '../pages/main/Main';
 import { Page } from '../../types/templates/Page';
 import { NotFound } from '../pages/notFound/NotFound';
 import { IRouter } from '../../types/router/IRouter';
@@ -32,14 +31,6 @@ class Router implements IRouter {
       this.navigate();
       console.log(event);
     });
-
-    // window.addEventListener('hashchange', (event) => {
-    //   const currentPath = window.location.hash;
-    //   if (this.routes.some((r) => currentPath.startsWith(r.path))) {
-    //     window.history.pushState(null, '', currentPath);
-    //   }
-    //   this.changePage('');
-    // });
   }
 
   updateQuery(query: string): void {
@@ -51,7 +42,6 @@ class Router implements IRouter {
     let hash = '';
     let path = '';
     [hash, path] = window.location.hash.split('?');
-    // window.history.pushState(null, '', hashpath);
     if (!hash) {
       hash = '#/main';
       window.history.pushState('', '', `${hash}`);
