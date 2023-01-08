@@ -9,4 +9,6 @@ export type EventBusType =
   | 'addProductItem'
   | 'removeProductItem'
   | 'showCartPage'
-  | 'changeCartPaginationLimit';
+  | 'changeCartPaginationLimit'
+  | 'applyPromoCode'
+  | 'dropPromoCode';
