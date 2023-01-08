@@ -8,10 +8,13 @@ import './cartCard.scss';
 export class CartCard extends Component {
   private product: IProduct;
   private count: number;
-  constructor(product: IProduct, count: number) {
+  private position: number;
+
+  constructor(product: IProduct, count: number, position: number) {
     super('div', 'card-body cartcard-hovered');
     this.product = product;
     this.count = count;
+    this.position = position;
   }
 
   render(): HTMLElement {
@@ -25,9 +28,14 @@ export class CartCard extends Component {
         <div class="col-sm-8">
           <div class="card-body">
             <h5 class="card-title">
-              <a href="#/details?id=${this.product.id}" class="card__link">
-                ${this.product.title}
-              </a>
+              <div class="row">
+                <div class="col">
+                  <a href="#/details?id=${this.product.id}" class="card__link">
+                    ${this.product.title}
+                  </a>
+                </div>
+                <div class="col flex-grow-0 text-end text-muted text-decoration-underline">${this.position}</div>
+              </div>
             </h5>
             <p class="card__description card-text">${this.product.description}</p>
             <div class="card__info">
@@ -93,9 +101,11 @@ export class CartCard extends Component {
   }
 
   private addItem(/*event: PointerEvent*/): void {
-    this.count += 1;
-    (this.elements.countField as HTMLInputElement).value = this.count + '';
-    eventBus.trigger('addProductItem', this.product);
+    if (this.count < this.product.stock) {
+      this.count += 1;
+      (this.elements.countField as HTMLInputElement).value = this.count + '';
+      eventBus.trigger('addProductItem', this.product);
+    }
   }
 
   private removeItem(/*event: PointerEvent*/): void {
@@ -109,35 +119,3 @@ export class CartCard extends Component {
     this.container.remove();
   }
 }
-
-// <div class="card-body">
-// <div class="row g-0">
-// <div class="col-sm-4">
-// <a href="#/details?id=1" class="card__link">
-// <img src="https://i.dummyjson.com/data/products/1/thumbnail.jpg" class="card-list__image card-img-top" alt="iPhone 9">
-//   </a>
-//   </div>
-//   <div class="col-sm-8">
-// <div class="card-body">
-// <h5 class="card-title">iPhone 9</h5>
-// <p class="card__description card-text">An apple mobile which is nothing like apple</p>
-// <div class="card__info">
-// <p class="card__info-item card-text"><small class="text-muted">Catygory: smartphones</small></p>
-// <p class="card__info-item card-text"><small class="text-muted">Brand: Apple</small></p>
-// <p class="card__info-item card-text"><small class="text-muted">Stock: 94</small></p>
-// <p class="card__info-item card-text"><small class="text-muted">Rating: 4.69</small></p>
-// </div>
-// </div>
-// </div>
-// </div>
-// <div class="card__controls">
-// <button class="btn btn-outline-secondary form-control rounded-pill">-</button>
-//   <input type="number" min="1" max="5" value="2" class="form-control text-center border-0 bi-input-cursor">
-// <button class="btn btn-outline-secondary form-control rounded-pill">+</button>
-//   </div>
-//   <div class="card__remove">
-// <button class="btn btn-outline-secondary form-control border-0 remove-icon">
-// <i class="bi bi-trash fs-3"></i>
-//   </button>
-//   </div>
-//   </div>

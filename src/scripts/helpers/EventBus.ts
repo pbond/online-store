@@ -11,7 +11,9 @@ type EnentBusType =
   | 'addProductItem'
   | 'removeProductItem'
   | 'showCartPage'
-  | 'changeCartPaginationLimit';
+  | 'changeCartPaginationLimit'
+  | 'applyPromoCode'
+  | 'dropPromoCode';
 
 class EventBus {
   private readonly events: EventsDictionary;

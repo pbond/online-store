@@ -3,6 +3,7 @@ import { ElementGenerator } from '../../helpers/ElementGenerator';
 import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
 import './header.scss';
+
 export class Header extends Component {
   constructor() {
     super('header', '');
@@ -19,13 +20,32 @@ export class Header extends Component {
   }
 
   updateCart(): void {
-    if (!this.elements.cartBadge) {
-      this.elements.cartBadge = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
+    if (!this.elements.cartBadgeCount && state.cart.products.length > 0) {
+      this.elements.cartBadgeCount = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
         className: 'badge position-absolute top-20 start-100 translate-middle bg-danger rounded-circle',
       });
-      this.elements.cartAnchor.append(this.elements.cartBadge);
+      this.elements.cartAnchor.append(this.elements.cartBadgeCount);
     }
-    this.elements.cartBadge.innerText = state.cart.products.length + '';
+
+    if (!this.elements.cartBadgePrice && state.cart.products.length > 0) {
+      this.elements.cartBadgePrice = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
+        className: 'badge position-absolute top-100 start-50 translate-middle bg-primary rounded-pill w-100',
+      });
+      this.elements.cartAnchor.append(this.elements.cartBadgePrice);
+    }
+
+    if (state.cart.products.length > 0) {
+      this.elements.cartBadgeCount.innerText = state.cart.products
+        .reduce((acc, { count }) => acc + count, 0)
+        .toString();
+      this.elements.cartBadgePrice.innerText =
+        '$' + state.cart.products.reduce((acc, { product, count }) => acc + product.price * count, 0).toFixed(2);
+    } else {
+      this.elements.cartBadgeCount?.remove();
+      this.elements.cartBadgePrice?.remove();
+      delete this.elements.cartBadgeCount;
+      delete this.elements.cartBadgePrice;
+    }
   }
 
   toggleFilterButton(isVisible: boolean): void {
@@ -61,7 +81,7 @@ export class Header extends Component {
   private createBrandLink(): HTMLAnchorElement {
     const link = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
       className: 'navbar-brand',
-      href: '/#/main',
+      href: '#/main',
       innerText: 'Online store',
     });
     link.insertAdjacentHTML('afterbegin', '<i class="bi bi-shop-window px-2"></i>');
@@ -115,9 +135,9 @@ export class Header extends Component {
     ul.insertAdjacentHTML(
       'afterbegin',
       `<li class="nav-item mr-auto">
-        <a href="#/details" class="nav-link">
+        <a href="#/vendors" class="nav-link">
           <i class="bi bi-archive"></i>
-          Details</a>
+          Vendors</a>
       </li>
       <li class="nav-item">
         <a href="#/contacts" class="nav-link">
@@ -146,7 +166,7 @@ export class Header extends Component {
 
     this.elements.cartAnchor = ElementGenerator.createCustomElement<HTMLAnchorElement>('a', {
       className: 'nav-link position-relative',
-      href: '/#/cart',
+      href: '#/cart',
       innerHTML: '<i class="bi bi-cart pe-2"></i>Cart',
     });
 
