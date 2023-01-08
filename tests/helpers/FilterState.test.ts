@@ -66,8 +66,8 @@ describe('FelterState tests', () => {
     result = filter.getFilteredProducts(productList, filterParams);
     expect(result).toEqual(products);
 
-    products = [productList[0], productList[1]];
-    filterParams = new URLSearchParams('brand=Apple&category=smartphones');
+    products = [productList[3], productList[2]];
+    filterParams = new URLSearchParams('brand=OPPO&brand=Samsung&sort=stock-Desc');
     result = filter.getFilteredProducts(productList, filterParams);
     expect(result).toEqual(products);
 
