@@ -6,6 +6,7 @@ import { PromoCode } from './promoCode/PromoCode';
 import eventBus from '../../helpers/EventBus';
 import { IPromoCode } from '../../../types/models/IPromoCode';
 import promoCodesList from '../../state/PromoCodesList';
+import { PaymentModal } from '../../modals/paymentModal/PaymentModal';
 
 export class Summary extends Component {
   private products: ICartProducts;
@@ -212,6 +213,8 @@ export class Summary extends Component {
   }
   private buyProducts(event: Event): void {
     console.log(event);
+    const modal = new PaymentModal();
+    document.body.append(modal.render());
   }
 
   private clearSearchedCodes(): void {
