@@ -67,9 +67,10 @@ class CartState implements ICartState {
     }
   }
 
-  saveCart(): void {
+  saveCart(products: ICartProducts): void {
+    this.products = products;
     window.removeEventListener('storage', this.onStorageUpdated);
-    localStorage.setItem('cartProducts', JSON.stringify(this.products));
+    localStorage.setItem('cartProducts', JSON.stringify(products));
     window.addEventListener('storage', this.onStorageUpdated);
   }
 

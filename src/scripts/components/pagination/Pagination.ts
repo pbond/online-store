@@ -73,7 +73,7 @@ export class Pagination extends Component {
     });
 
     const currButton = ElementGenerator.createCustomElement<HTMLButtonElement>('button', {
-      className: 'page-link active form-control border-top-0',
+      className: 'page-link active form-control border-0',
       ariaLabel: 'Current',
       innerHTML: `1`,
     });

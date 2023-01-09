@@ -10,5 +10,5 @@ export interface ICartState {
   removeFromCart: (product: IProduct) => void;
   addItemToCart: (product: IProduct) => void;
   removeItemFromCart: (product: IProduct) => void;
-  saveCart: () => void;
+  saveCart: (products: ICartProducts) => void;
 }
