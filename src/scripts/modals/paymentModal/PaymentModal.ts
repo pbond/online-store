@@ -64,10 +64,10 @@ export class PaymentModal extends Component {
   private createPersonalInfo(): HTMLDivElement[] {
     const inputName = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
       type: 'text',
-      className: 'form-control',
+      className: 'form-control notvalid',
       placeholder: 'Name',
       name: 'name',
-      oninput: () => this.validateName(),
+      onchange: () => this.validateName(),
     });
 
     const inputPhone = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
@@ -75,7 +75,8 @@ export class PaymentModal extends Component {
       className: 'form-control',
       placeholder: 'Phone',
       name: 'phone',
-      oninput: () => this.validatePhone(),
+      // oninput: () => this.onPhoneInput(),
+      onchange: () => this.validatePhone(),
     });
 
     const inputLocation = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
@@ -83,7 +84,7 @@ export class PaymentModal extends Component {
       className: 'form-control',
       placeholder: 'Delivery address',
       name: 'location',
-      oninput: () => this.validateLocation(),
+      onchange: () => this.validateLocation(),
     });
 
     const inputEmail = ElementGenerator.createCustomElement<HTMLInputElement>('input', {
@@ -91,16 +92,18 @@ export class PaymentModal extends Component {
       className: 'form-control',
       placeholder: 'Email',
       name: 'email',
-      oninput: () => this.validateEmail(),
+      onchange: () => this.validateEmail(),
     });
 
     return [inputName, inputEmail, inputPhone, inputLocation].map((input) => {
       this.elements[input.name] = input;
       const container = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
         className: 'row mb-2',
-        innerHTML: `<div class="col"></div>`,
+        innerHTML: `<div class="col">
+                      <div class="message">Invalid ${input.name}</div>  
+                    </div>`,
       });
-      container.firstElementChild?.append(input);
+      container.firstElementChild?.prepend(input);
       return container;
     });
   }
@@ -186,18 +189,58 @@ export class PaymentModal extends Component {
   }
 
   private validateName(): boolean {
+    const names = (this.elements.name as HTMLInputElement).value.split(' ');
+    if (names.length >= 2 && names.every((name) => name.length >= 3)) {
+      this.elements.name.classList.add('is-valid');
+      this.elements.name.classList.remove('is-invalid');
+      return true;
+    }
+
+    this.elements.name.classList.add('is-invalid');
+    this.elements.name.classList.remove('is-valid');
     return false;
   }
 
+  // private onPhoneInput(): void {
+  //   const target = this.elements.phone as HTMLInputElement;
+  //   target.value = '+' + target.value.replace(/[^0-9]/i, '');
+  // }
   private validatePhone(): boolean {
+    const phone = (this.elements.phone as HTMLInputElement).value;
+    if (phone.match(/[+][0-9]{9,}/)) {
+      this.elements.phone.classList.add('is-valid');
+      this.elements.phone.classList.remove('is-invalid');
+      return true;
+    }
+
+    this.elements.phone.classList.add('is-invalid');
+    this.elements.phone.classList.remove('is-valid');
     return false;
   }
 
   private validateLocation(): boolean {
+    const location = (this.elements.location as HTMLInputElement).value.split(' ');
+    if (location.length >= 3 && location.every((point) => point.length >= 5)) {
+      this.elements.location.classList.add('is-valid');
+      this.elements.location.classList.remove('is-invalid');
+      return true;
+    }
+
+    this.elements.location.classList.add('is-invalid');
+    this.elements.location.classList.remove('is-valid');
     return false;
   }
 
   private validateEmail(): boolean {
+    const email = (this.elements.email as HTMLInputElement).value;
+    if (email.match(/[^@\s]+@[^@\s]+\.[^@\s]{2,4}/)) {
+      this.elements.email.classList.add('is-valid');
+      this.elements.email.classList.remove('is-invalid');
+      return true;
+    }
+
+    this.elements.email.classList.add('is-invalid');
+    this.elements.email.classList.remove('is-valid');
     return false;
   }
 
