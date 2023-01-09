@@ -38,6 +38,11 @@ class Router implements IRouter {
     window.history.pushState('', '', `${hash}${query ? '?' + query : ''}`);
   }
 
+  goto(path: string): void {
+    window.history.pushState('', '', path);
+    this.navigate();
+  }
+
   navigate(): void {
     let hash = '';
     let path = '';

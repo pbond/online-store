@@ -11,10 +11,12 @@ import { PaymentModal } from '../../modals/paymentModal/PaymentModal';
 export class Summary extends Component {
   private products: ICartProducts;
   private promoCodes: PromoCode[];
+  private paymentModal: PaymentModal;
   constructor(products: ICartProducts) {
     super('div', 'card cart_summary');
     this.products = products;
     this.promoCodes = [];
+    this.paymentModal = new PaymentModal();
   }
 
   public render(): HTMLElement {
@@ -211,10 +213,8 @@ export class Summary extends Component {
     const item = new PromoCode(promo, true);
     this.elements.searchedCodes.append(item.render());
   }
-  private buyProducts(event: Event): void {
-    console.log(event);
-    const modal = new PaymentModal();
-    document.body.append(modal.render());
+  private buyProducts(/*event: Event*/): void {
+    document.body.append(this.paymentModal.render());
   }
 
   private clearSearchedCodes(): void {
@@ -242,6 +242,7 @@ export class Summary extends Component {
     eventBus.off('applyPromoCode', this.onApplyPromoCode);
     eventBus.off('dropPromoCode', this.onDropPromoCode);
     eventBus.off('cartUpdated', this.onCartUpdated);
+    this.paymentModal.destroy();
     this.container.remove();
   }
 }

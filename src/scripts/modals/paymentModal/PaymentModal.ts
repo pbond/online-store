@@ -1,6 +1,9 @@
 import { Component } from '../../../types/templates/Component';
 import './paymentModal.scss';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
+import router from '../../router/Router';
+import eventBus from '../../helpers/EventBus';
+
 export class PaymentModal extends Component {
   constructor() {
     super('div', 'payment-modal');
@@ -41,9 +44,9 @@ export class PaymentModal extends Component {
     });
 
     this.elements.submitButton = submitButton;
-    modalFooter.append(submitButton);
-
+    this.elements.modalBody = modalBody;
     modalBody.append(...this.createPersonalInfo(), this.createCardLayout());
+    modalFooter.append(submitButton);
 
     this.container.lastElementChild?.firstElementChild?.firstElementChild?.append(modalBody, modalFooter);
     this.init();
@@ -96,7 +99,7 @@ export class PaymentModal extends Component {
     });
 
     return [inputName, inputEmail, inputPhone, inputLocation].map((input) => {
-      this.elements[input.name] = input;
+      this.elements[input.name + 'Input'] = input;
       const container = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
         className: 'row mb-2',
         innerHTML: `<div class="col">
@@ -158,7 +161,7 @@ export class PaymentModal extends Component {
       type: 'text',
       className: 'form-control',
       oninput: () => this.checkCardDate(),
-      onchange: () => this.validateCardCvv(),
+      onchange: () => this.validateCardDate(),
     });
 
     const cvvInputCol = ElementGenerator.createElementByInnerHtml<HTMLDivElement>(`
@@ -191,18 +194,18 @@ export class PaymentModal extends Component {
   }
 
   private validateName(): boolean {
-    if (!(this.elements.name instanceof HTMLInputElement)) {
+    if (!(this.elements.nameInput instanceof HTMLInputElement)) {
       return false;
     }
-    const names = this.elements.name.value.split(' ');
+    const names = this.elements.nameInput.value.split(' ');
     if (names.length >= 2 && names.every((name) => name.length >= 3)) {
-      this.elements.name.classList.add('is-valid');
-      this.elements.name.classList.remove('is-invalid');
+      this.elements.nameInput.classList.add('is-valid');
+      this.elements.nameInput.classList.remove('is-invalid');
       return true;
     }
 
-    this.elements.name.classList.add('is-invalid');
-    this.elements.name.classList.remove('is-valid');
+    this.elements.nameInput.classList.add('is-invalid');
+    this.elements.nameInput.classList.remove('is-valid');
     return false;
   }
 
@@ -215,52 +218,53 @@ export class PaymentModal extends Component {
   //   target.value = '+' + target.value.replace(/[^0-9]/i, '');
   // }
   private validatePhone(): boolean {
-    if (!(this.elements.phone instanceof HTMLInputElement)) {
+    if (!(this.elements.phoneInput instanceof HTMLInputElement)) {
       return false;
     }
-    const phone = this.elements.phone.value;
+    const phone = this.elements.phoneInput.value;
     if (phone.match(/[+][0-9]{9,}/)) {
-      this.elements.phone.classList.add('is-valid');
-      this.elements.phone.classList.remove('is-invalid');
+      this.elements.phoneInput.classList.add('is-valid');
+      this.elements.phoneInput.classList.remove('is-invalid');
       return true;
     }
 
-    this.elements.phone.classList.add('is-invalid');
-    this.elements.phone.classList.remove('is-valid');
+    this.elements.phoneInput.classList.add('is-invalid');
+    this.elements.phoneInput.classList.remove('is-valid');
     return false;
   }
 
   private validateLocation(): boolean {
-    if (!(this.elements.location instanceof HTMLInputElement)) {
+    if (!(this.elements.locationInput instanceof HTMLInputElement)) {
       return false;
     }
-    const location = this.elements.location.value.split(' ');
+    const location = this.elements.locationInput.value.split(' ');
     if (location.length >= 3 && location.every((point) => point.length >= 5)) {
-      this.elements.location.classList.add('is-valid');
-      this.elements.location.classList.remove('is-invalid');
+      this.elements.locationInput.classList.add('is-valid');
+      this.elements.locationInput.classList.remove('is-invalid');
       return true;
     }
 
-    this.elements.location.classList.add('is-invalid');
-    this.elements.location.classList.remove('is-valid');
+    this.elements.locationInput.classList.add('is-invalid');
+    this.elements.locationInput.classList.remove('is-valid');
     return false;
   }
 
   private validateEmail(): boolean {
-    if (!(this.elements.email instanceof HTMLInputElement)) {
+    if (!(this.elements.emailInput instanceof HTMLInputElement)) {
       return false;
     }
-    const email = this.elements.email.value;
+    const email = this.elements.emailInput.value;
     if (email.match(/[^@\s]+@[^@\s]+\.[^@\s]{2,4}/)) {
-      this.elements.email.classList.add('is-valid');
-      this.elements.email.classList.remove('is-invalid');
+      this.elements.emailInput.classList.add('is-valid');
+      this.elements.emailInput.classList.remove('is-invalid');
       return true;
     }
 
-    this.elements.email.classList.add('is-invalid');
-    this.elements.email.classList.remove('is-valid');
+    this.elements.emailInput.classList.add('is-invalid');
+    this.elements.emailInput.classList.remove('is-valid');
     return false;
   }
+
   private checkCardNumber(): void {
     if (!(this.elements.cardNumberInput instanceof HTMLInputElement)) {
       return;
@@ -274,6 +278,7 @@ export class PaymentModal extends Component {
     target.value = result.join(' ');
     this.showCardLogo(numbers[0]);
   }
+
   private validateCardNumber(): boolean {
     if (!(this.elements.cardNumberInput instanceof HTMLInputElement)) {
       return false;
@@ -350,6 +355,7 @@ export class PaymentModal extends Component {
     }
     this.elements.cardCvvInput.value = this.elements.cardCvvInput.value.slice(0, 3);
   }
+
   private validateCardCvv(): boolean {
     if (!(this.elements.cardCvvInput instanceof HTMLInputElement)) {
       return false;
@@ -366,12 +372,51 @@ export class PaymentModal extends Component {
   }
 
   private formSubmit(): void {
-    setTimeout(() => {
-      console.log('submit');
-    }, 1);
+    const inputs = Object.keys(this.elements).filter((key) => key.indexOf('Input') > -1);
+    for (const key of inputs) {
+      const element = this.elements[key];
+      const isValidInput: boolean = element.onchange?.(new Event(''));
+      if (!isValidInput) {
+        return;
+      }
+    }
+
+    const timer = this.showThanksMessage();
+    this.leaveModal(timer, 5000);
   }
 
-  destroy() {
-    super.destroy();
+  private showThanksMessage(): HTMLSpanElement {
+    const timer = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
+      innerText: '5 sec',
+    });
+    this.elements.modalBody.innerHTML = `
+        <div class="row">
+          <div class="col alert alert-success text-center mx-3">
+            <i class="bi bi-check-circle thanks-message"></i>
+            <p class="mt-3">Thanks for your order. Redirect to the catalog in </p>
+          </div>
+        </div>
+    `;
+    this.elements.modalBody.nextElementSibling?.remove();
+    this.elements.modalBody?.firstElementChild?.firstElementChild?.lastElementChild?.insertAdjacentElement(
+      'beforeend',
+      timer
+    );
+    return timer;
+  }
+
+  private leaveModal(timer: HTMLSpanElement, duration: number): void {
+    let restSeconds = duration / 1000;
+
+    const interval = setInterval(() => {
+      restSeconds--;
+      timer.innerHTML = `<span>${restSeconds} sec</span>`;
+    }, 1000);
+
+    setTimeout(() => {
+      window.clearInterval(interval);
+      eventBus.trigger('cartUpdated', []);
+      router.goto('#/main');
+    }, duration);
   }
 }

@@ -1,12 +1,14 @@
 import { Component } from '../../../types/templates/Component';
 import { ElementGenerator } from '../../helpers/ElementGenerator';
-import state from '../../state/State';
 import eventBus from '../../helpers/EventBus';
 import './header.scss';
+import { ICartProducts } from '../../../types/models/ICartProduct';
 
 export class Header extends Component {
+  private products: ICartProducts;
   constructor() {
     super('header', '');
+    this.products = [];
   }
 
   init(): Header {
@@ -19,27 +21,26 @@ export class Header extends Component {
     return this;
   }
 
-  updateCart(): void {
-    if (!this.elements.cartBadgeCount && state.cart.products.length > 0) {
+  updateCart(products: ICartProducts): void {
+    this.products = products;
+    if (!this.elements.cartBadgeCount && this.products.length > 0) {
       this.elements.cartBadgeCount = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
         className: 'badge position-absolute top-20 start-100 translate-middle bg-danger rounded-circle',
       });
       this.elements.cartAnchor.append(this.elements.cartBadgeCount);
     }
 
-    if (!this.elements.cartBadgePrice && state.cart.products.length > 0) {
+    if (!this.elements.cartBadgePrice && this.products.length > 0) {
       this.elements.cartBadgePrice = ElementGenerator.createCustomElement<HTMLSpanElement>('span', {
         className: 'badge position-absolute top-100 start-50 translate-middle bg-primary rounded-pill w-100',
       });
       this.elements.cartAnchor.append(this.elements.cartBadgePrice);
     }
 
-    if (state.cart.products.length > 0) {
-      this.elements.cartBadgeCount.innerText = state.cart.products
-        .reduce((acc, { count }) => acc + count, 0)
-        .toString();
+    if (this.products.length > 0) {
+      this.elements.cartBadgeCount.innerText = this.products.reduce((acc, { count }) => acc + count, 0).toString();
       this.elements.cartBadgePrice.innerText =
-        '$' + state.cart.products.reduce((acc, { product, count }) => acc + product.price * count, 0).toFixed(2);
+        '$' + this.products.reduce((acc, { product, count }) => acc + product.price * count, 0).toFixed(2);
     } else {
       this.elements.cartBadgeCount?.remove();
       this.elements.cartBadgePrice?.remove();

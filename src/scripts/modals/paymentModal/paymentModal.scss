@@ -37,3 +37,7 @@ input.form-control.is-invalid + div.message {
 .webmoney-logo {
   content: url("https://assets.web.money/img/logo/WebMoney_logo_white.svg");
 }
+
+.thanks-message:before {
+  font-size: 8rem;
+}
