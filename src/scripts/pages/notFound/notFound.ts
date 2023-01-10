@@ -11,7 +11,11 @@ export class NotFound extends Page {
   render(): HTMLElement {
     const content = ElementGenerator.createCustomElement<HTMLElement>('h2', {
       className: 'notfound__content',
-      innerText: '404 Page NOT found',
+      innerHTML: `
+        <div>404 Page NOT found</div>
+        <div>
+          <a href="#/main" class="btn btn-primary mt-4">Return to main page</a>
+        </div>`,
     });
     this.container.append(content);
     this.container.classList.add('notfound');
