@@ -1,0 +1,18 @@
+// @import "styles/abstract/constants";
+// @import "styles/abstract/mixins";
+// @import "styles/abstract/placeholders";
+
+//@import "scripts/components/cardInVitrine/cardInVitrine.scss";
+@import 'bootstrap/bootstrap.scss';
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  background-image: url(./assets/img/gallery_background.jpg);
+  background-size: auto;
+  flex-grow: 1;
+}

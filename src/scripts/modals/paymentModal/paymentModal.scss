@@ -1,0 +1,43 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+input.form-control + div.message {
+  display: none;
+}
+
+input.form-control.is-invalid + div.message {
+  display: block;
+  color: #D31414;
+}
+
+
+.vendor-logo {
+  height: 1.5em;
+}
+
+.visa-logo {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/a/ac/Old_Visa_Logo.svg");
+}
+
+.mastercard-logo {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/f/f0/Mastercard_logo.svg");
+}
+
+.paypal-logo {
+  content: url("https://upload.wikimedia.org/wikipedia/commons/3/39/PayPal_logo.svg");
+}
+
+.webmoney-logo {
+  content: url("https://assets.web.money/img/logo/WebMoney_logo_white.svg");
+}
+
+.thanks-message:before {
+  font-size: 8rem;
+}

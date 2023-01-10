@@ -1,0 +1,9 @@
+.pagination {
+  .page-item {
+    width: 30%;
+  }
+}
+
+.page-link.active {
+  z-index: 0;
+}
