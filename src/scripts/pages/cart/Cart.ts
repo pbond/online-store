@@ -66,6 +66,9 @@ export class Cart extends Page {
 
     this.showCartPage(this.pageNum);
     this.init();
+    if (this.path === 'immediately=true') {
+      eventBus.trigger('showPaymentModal', null);
+    }
     return this.container;
   }
 

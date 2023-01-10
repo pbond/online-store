@@ -165,7 +165,9 @@ export class Summary extends Component {
     this.onApplyPromoCode = this.onApplyPromoCode.bind(this);
     this.onDropPromoCode = this.onDropPromoCode.bind(this);
     this.onCartUpdated = this.onCartUpdated.bind(this);
+    this.buyProducts = this.buyProducts.bind(this);
 
+    eventBus.on('showPaymentModal', this.buyProducts);
     eventBus.on('applyPromoCode', this.onApplyPromoCode);
     eventBus.on('dropPromoCode', this.onDropPromoCode);
     eventBus.on('cartUpdated', this.onCartUpdated);
@@ -242,6 +244,7 @@ export class Summary extends Component {
     eventBus.off('applyPromoCode', this.onApplyPromoCode);
     eventBus.off('dropPromoCode', this.onDropPromoCode);
     eventBus.off('cartUpdated', this.onCartUpdated);
+    eventBus.off('showPaymentModal', this.buyProducts);
     this.paymentModal.destroy();
     this.container.remove();
   }
