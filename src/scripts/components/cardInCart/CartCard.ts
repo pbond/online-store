@@ -51,11 +51,22 @@ export class CartCard extends Component {
 
     this.container.append(cardLayout);
 
+    const userInfo = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'user__info',
+    });
+    const priceInfo = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
+      className: 'price__info w-100 text-center',
+      innerHTML: `<strong>$${this.product.price * this.count}</strong>`,
+    });
+
     const controlsContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', {
       className: 'card__controls',
     });
     controlsContainer.append(this.createMinusButton(), this.createCountField(), this.createPlusButton());
-    this.container.append(controlsContainer);
+
+    this.elements.priceInfo = priceInfo;
+    userInfo.append(priceInfo, controlsContainer);
+    this.container.append(userInfo);
 
     const removeContainer = ElementGenerator.createCustomElement<HTMLDivElement>('div', { className: 'card__remove' });
     removeContainer.append(this.createRemoveButton());
@@ -104,6 +115,7 @@ export class CartCard extends Component {
     if (this.count < this.product.stock) {
       this.count += 1;
       (this.elements.countField as HTMLInputElement).value = this.count + '';
+      this.elements.priceInfo.innerHTML = `<strong>$${this.product.price * this.count}</strong>`;
       eventBus.trigger('addProductItem', this.product);
     }
   }
@@ -111,6 +123,7 @@ export class CartCard extends Component {
   private removeItem(/*event: PointerEvent*/): void {
     this.count -= 1;
     (this.elements.countField as HTMLInputElement).value = this.count + '';
+    this.elements.priceInfo.innerHTML = `<strong>$${this.product.price * this.count}</strong>`;
     eventBus.trigger('removeProductItem', this.product);
   }
 
