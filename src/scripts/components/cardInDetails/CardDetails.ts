@@ -5,6 +5,7 @@ import './cardDetails.scss';
 import { IProduct } from '../../../types/models/IProduct';
 import eventBus from '../../helpers/EventBus';
 import { Button } from '../button/Button';
+import router from '../../router/Router';
 
 export class CardDetails extends Component {
   private product: IProduct;
@@ -162,7 +163,7 @@ export class CardDetails extends Component {
       if (!this.isInCart) {
         eventBus.trigger('addProductToCart', this.product);
       }
-      window.location.href = '#/cart';
+      router.goto('#/cart?immediately=true');
     }
   }
 

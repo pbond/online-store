@@ -11,4 +11,5 @@ export type EventBusType =
   | 'showCartPage'
   | 'changeCartPaginationLimit'
   | 'applyPromoCode'
-  | 'dropPromoCode';
+  | 'dropPromoCode'
+  | 'showPaymentModal';
